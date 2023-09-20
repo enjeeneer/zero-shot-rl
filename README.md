@@ -1,6 +1,5 @@
 # Conservative World Models
 
----
 Original implementations of Conservative Forward Backward representations as proposed in
 
 [Conservative World Models](https://arxiv.org/abs/2110.00468) by 
