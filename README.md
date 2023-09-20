@@ -9,13 +9,23 @@ Original implementations of Conservative Forward Backward representations as pro
 
 ## Method
 
+This work focuses on performing zero-shot reinforcement learning (RL) from suboptimal datasets. In zero-shot RL, we assume the agent
+has access to a dataset of transitions collected from the environment that it can use to build a world model to train its policy against (below (_left_)).
+The existing state-of-the-art method, Forward Backward (FB) representations, does this remarkably well when provided access to large and diverse datasets. 
+However, when the dataset is small or collected from a suboptimal behaviour policy, FB representations fail, specifically by overestimating the value of actions not in the dataset (below (_middle_)).
+
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
+
+As a fix, we propose a family of _Conservative_ Forward Backward representations, which suppresses the value of actions not in the dataset (above (_right_))
 
 <img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">
 
+In experiments across a variety of domains, tasks and datasets, we show our family of conservative algorithms performs favourably w.r.t vanilla FB (above). For more details
+we direct the reader to the paper linked above.
+
 ## Setup
 ### Dependencies
-Assuming you already have MuJoCo installed, install dependencies using `conda`:
+Assuming you have [MuJoCo](https://mujoco.org/) installed, install dependencies using `conda`:
 ```
 conda env create -f environment.yaml
 conda activate world-models
@@ -73,6 +83,9 @@ To train a standard Value-Conservative Forward Backward Representation with the 
 ```bash
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```
+
+### Finetuning
+
 
 ## Citation
 If you found this work useful, or you use this project to inform your own research, please consider citing it with:
