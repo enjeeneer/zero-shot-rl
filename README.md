@@ -9,7 +9,7 @@ Original implementations of Conservative Forward Backward representations as pro
 
 ## Method
 
-![VCFB Intuition](/media/vcfb-intuition.png "VCFB intuition")
+<img src="/media/vcfb-intuition.png" width=100% height=auto>
 
 
 ## Setup
