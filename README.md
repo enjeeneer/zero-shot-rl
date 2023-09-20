@@ -11,6 +11,7 @@ Original implementations of Conservative Forward Backward representations as pro
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
+<img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">
 
 ## Setup
 ### Dependencies
@@ -40,7 +41,7 @@ and the dataset collecting algorithms are:
 
 As an illustrative example, the state coverage on `point_mass_maze` looks like this:
 
-![Dataset state coverage](/media/dataset-heatmap.png "Dataset state coverage on Maze")
+<img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
 
 
 For each domain-algorithm pair, their associated dataset needs to be downloaded manually from the [ExORL benchmark repo](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
