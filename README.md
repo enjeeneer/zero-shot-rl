@@ -9,7 +9,7 @@ Original implementations of Conservative Forward Backward representations as pro
 
 ## Method
 
-<img src="/media/vcfb-intuition.png" width=60% height=auto>
+<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
 
 ## Setup
