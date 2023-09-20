@@ -43,17 +43,14 @@ As an illustrative example, the state coverage on `point_mass_maze` looks like t
 
 <img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
 
+For each domain, dataset need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
+To download the `rnd` dataset on the `walker` domain, seperate their command line args with an `_` and run:  
 
-For each domain-algorithm pair, their associated dataset needs to be downloaded manually from the [ExORL benchmark repo](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
-To download the `rnd` dataset on the `walker` domain, from the root run:  
 ```bash
-./download.sh walker rnd
+python exorl_reformatter.py walker_rnd
 ```
-This will download the data as episodes of transitions into the `dataset/walker/rnd/buffer` directory.
-Then, reformat the data into a single `.npz` file containing all transitions by running:
-```bash
-python exorl_reformatter.py walker rnd
-```
+
+this will create a single `dataset.npz` file in the `dataset/walker/rnd/buffer` directory.
 
 ### WandB
 To use [Weights & Biases](https://wandb.ai/home) for logging, create a free account and run `wandb login` from the command line. 
