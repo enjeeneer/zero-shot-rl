@@ -4,7 +4,7 @@ Original implementations of Conservative Forward Backward representations as pro
 
 [Conservative World Models](https://arxiv.org/abs/2110.00468) by 
 
-[Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
+[//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
 
 ## Method
 
