@@ -2,11 +2,11 @@
 
 Original implementations of Conservative Forward Backward representations as proposed in
 
-[Conservative World Models](https://arxiv.org/abs/2110.00468) by 
+[Conservative World Models](https://arxiv.org/abs/2110.00468)  
 
 [//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
 
-## Method
+## Summary
 
 This work focuses on performing zero-shot reinforcement learning (RL) from suboptimal datasets. In zero-shot RL, we assume the agent
 has access to a dataset of transitions collected from the environment that it can use to build a world model to train its policy against (below (_left_)).
