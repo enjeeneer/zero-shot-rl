@@ -717,7 +717,7 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
 
         batch_indices = torch.randint(
             0, len(self.storage["observations"]), (batch_size,)
-        )  # TODO: make attribute of replay buffer
+        )
 
         return Batch(
             observations=self.storage["observations"][batch_indices],

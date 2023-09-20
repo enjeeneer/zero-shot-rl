@@ -91,8 +91,8 @@ class FB(AbstractAgent):
             device=device,
         )
 
-        self.encoder = torch.nn.Identity()  # TODO: add encoder for pixels
-        self.augmentation = torch.nn.Identity()  # TODO: add augmentation for pixels
+        self.encoder = torch.nn.Identity()
+        self.augmentation = torch.nn.Identity()
 
         # load weights into target networks
         self.FB.forward_representation_target.load_state_dict(
@@ -139,7 +139,7 @@ class FB(AbstractAgent):
         Args:
             observation: observation array of shape [observation_length]
             task: task array of shape [z_dimension]
-            step: current step in env  # TODO: check this is indeed used in rollouts?
+            step: current step in env
             sample: whether to sample action from actor distribution
         Returns:
             action: action array of shape [action_length]
