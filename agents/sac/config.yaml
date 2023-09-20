@@ -1,0 +1,34 @@
+name: "sac"
+learning_steps: 1000000
+buffer_capacity: 1000000
+activation: "relu"
+discount: 0.99
+batch_size: 1024
+eval_rollouts: 10
+eval_frequency: 20000
+seed: 42
+seed_steps: 5000
+
+# critic
+critic_hidden_dimension: 512
+critic_hidden_layers: 3
+critic_learning_rate: 0.0001
+critic_betas: [0.9, 0.999]
+critic_target_update_frequency: 2
+critic_tau: 0.005
+
+# actor
+actor_hidden_dimension: 512
+actor_hidden_layers: 3
+actor_learning_rate: 0.0001
+actor_betas: [0.9, 0.999]
+actor_log_std_bounds: [-5, 2]
+actor_update_frequency: 1
+
+# alpha
+alpha_learning_rate: 0.0001
+alpha_betas: [0.9, 0.999]
+init_temperature: 0.5
+learnable_temperature: False
+
+

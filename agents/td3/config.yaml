@@ -1,0 +1,24 @@
+name: "td3"
+learning_steps: 1000000
+buffer_capacity: 1000000
+activation: "relu"
+discount: 0.99
+batch_size: 1024
+eval_rollouts: 10
+eval_frequency: 20000
+seed: 42
+
+# critic
+critic_hidden_dimension: 1024
+critic_hidden_layers: 2
+critic_learning_rate: 0.0001
+critic_target_update_frequency: 2
+critic_tau: 0.01
+
+# actor
+actor_hidden_dimension: 1024
+actor_hidden_layers: 2
+actor_learning_rate: 0.0001
+actor_update_frequency: 1
+std_dev_clip: 0.3
+std_dev_schedule: 0.2

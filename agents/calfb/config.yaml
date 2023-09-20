@@ -1,0 +1,48 @@
+# training/eval
+batch_size: 512
+max_buffer_episodes: 5000
+z_inference_steps: 100000
+discount: 0.98
+eval_frequency: 20000  # how often to evaluate the agent in learning steps
+eval_rollouts: 10  # how many rollouts to average over when evaluating
+
+# forward-backward
+preprocessor_hidden_dimension: 1024
+preprocessor_hidden_layers: 2
+preprocessor_output_dimension: 512
+preprocessor_activation: "relu"
+
+z_dimension: 50
+
+forward_hidden_dimension: 256
+forward_hidden_layers: 2
+forward_number_of_features: 2  # {obs-action, obs-z}
+forward_activation: "relu"
+
+backward_hidden_dimension: 256
+backward_hidden_layers: 3
+backward_activation: "relu"
+
+actor_hidden_dimension: 1024
+actor_hidden_layers: 2
+actor_activation: "relu"
+
+seed: 42
+critic_learning_rate: 0.0001
+actor_learning_rate: 0.00003
+learning_steps: 1000000
+learning_rate_coefficient: 1
+orthonormalisation_coefficient: 1
+z_mix_ratio: 0.5
+gaussian_actor: false
+std_dev_clip: 0.3
+std_dev_schedule: "0.2"
+std_dev_eval: 0.05
+tau: 0.01
+
+# conservative parameters
+total_action_samples: 12
+ood_action_weight: 0.5  # should be multiple of 0.25
+alpha: 0.01
+target_conservative_penalty: 50.0
+

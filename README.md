@@ -69,13 +69,13 @@ Subsequent runs should automatically log to this project.
 ### Algorithms
 We provide implementations of the following algorithms: 
 
-| **Algorithm**                                         | **Authors**                                                    | **Command Line Argument** |
-|-------------------------------------------------------|----------------------------------------------------------------| -------------------------------|
- | Conservative $Q$-learning                             | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | `cql`|
- | Offline TD3                                           | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`|
- | Forward-Backward Representations                      | [Touati et. al (2022)](https://arxiv.org/abs/2209.14935)                                       | `fb`|
- | Value-Conservative Forward-Backward Representations   | Jeen et. al (2023)                                             | `vcfb`|
- | Measure-Conservative Forward-Backward Representations | Jeen et. al (2023)                                             | `mcfb`|
+| **Algorithm**                           | **Authors**                                                    | **Command Line Argument** |
+|-----------------------------------------|----------------------------------------------------------------| -------------------------------|
+ | Conservative $Q$-learning               | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | `cql`|
+ | Offline TD3                             | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`|
+ | FB Representations                      | [Touati et. al (2022)](https://arxiv.org/abs/2209.14935)                                       | `fb`|
+ | Value-Conservative FB Representations   | Jeen et. al (2023)                                             | `vcfb`|
+ | Measure-Conservative FB Representations | Jeen et. al (2023)                                             | `mcfb`|
 
 ### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` dataset to solve all tasks in the `walker` domain, run:
