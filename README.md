@@ -62,9 +62,11 @@ and the dataset collecting algorithms are:
  | [Diversity is All You Need (DIAYN)](https://arxiv.org/abs/1802.06070)                                 | Medium                    | `diayn`                  |
  | Random                                                                | Low                       | `random`                 |
 
-As an illustrative example, the state coverage on `point_mass_maze` looks like this:
+State coverage illustrations on `point_mass_maze` are provided in Figure 3.
 
 <img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
+
+_Figure 3: Point-mass maze state coverage by dataset._
 
 For each domain, dataset need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
 To download the `rnd` dataset on the `walker` domain, seperate their command line args with an `_` and run:  
