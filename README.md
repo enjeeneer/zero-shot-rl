@@ -62,13 +62,7 @@ and the dataset collecting algorithms are:
  | [Diversity is All You Need (DIAYN)](https://arxiv.org/abs/1802.06070)                                 | Medium                    | `diayn`                  |
  | Random                                                                | Low                       | `random`                 |
 
-State coverage illustrations on `point_mass_maze` are provided in Figure 3.
-
-<img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
-
-_Figure 3: Point-mass maze state coverage by dataset._
-
-For each domain, datasets need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
+State coverage illustrations on `point_mass_maze` are provided in Figure 3. For each domain, datasets need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
 To download the `rnd` dataset on the `walker` domain, seperate their command line args with an `_` and run:  
 
 ```bash
@@ -76,6 +70,10 @@ python exorl_reformatter.py walker_rnd
 ```
 
 this will create a single `dataset.npz` file in the `dataset/walker/rnd/buffer` directory.
+
+<img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
+
+_Figure 3: Point-mass maze state coverage by dataset._
 
 ### WandB
 To use [Weights & Biases](https://wandb.ai/home) for logging, create a free account and run `wandb login` from the command line. 
