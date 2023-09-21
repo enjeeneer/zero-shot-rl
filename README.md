@@ -15,17 +15,14 @@ If our dataset is pseudo-optimal, that is to say, it tells our domestic robot th
 then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently. On average it will 
 solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--
 then FB representations fail. They fail because they overestimate the value of the data not present in our dataset, or in RL parlance, they 
-_overestimate out-of-distribution state-action values_. We illustrate this below in the middle plot:
+_overestimate out-of-distribution state-action values_--Figure 1 (middle).
 
-<figure>
- <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
- <figcaption>Figure 1: **Overview**. (_Left_) Zero-Shot RL methods must train on a dataset which
-            was collected by a behaviour policy optimising against task $z_{\mathrm{collect}}$,
-            yet generalise to new tasks $z_{\mathrm{eval}}$ at test time. Both tasks have associated
-            optimal value functions $Q_{z_{\mathrm{collect}}}^*$ and $Q_{z_{\mathrm{eval}}}^*$ for a given
-            marginal state. (\textit{Middle}) Forward Backward (FB) representations overestimate the value of actions not in the dataset for all tasks. (\textit{Right}) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the dataset for all tasks. Black dots represent state-action samples present in the dataset. </figcaption>
-</figure>
-
+<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
+_Figure 1: Zero-Shot RL methods must train on a dataset which was collected by a behaviour policy optimising against task $z_{\mathrm{collect}}$,
+yet generalise to new tasks $z_{\mathrm{eval}}$ at test time. Both tasks have associated optimal value functions $Q_{z_{\mathrm{collect}}}^*$
+and $Q_{z_{\mathrm{eval}}}^*$ for a given marginal state. (\textit{Middle}) FB representations overestimate the value of actions not in the
+dataset for all tasks. (\textit{Right}) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
+dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
 In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
 The family of algorithms we propose are called _Conservative_ Forward Backward representations, illustrated in the right plot above. In experiments across
