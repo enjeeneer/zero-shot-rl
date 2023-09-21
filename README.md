@@ -73,7 +73,7 @@ this will create a single `dataset.npz` file in the `dataset/walker/rnd/buffer` 
 
 <img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
 
-_Figure 3: Point-mass maze state coverage by dataset._
+_Figure 3: **State coverage** by dataset on `point_mass_maze`._
 
 ### WandB
 To use [Weights & Biases](https://wandb.ai/home) for logging, create a free account and run `wandb login` from the command line. 
