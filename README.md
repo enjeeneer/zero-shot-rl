@@ -13,7 +13,7 @@ FB representations overestimate the value of actions not in the dataset for all 
 dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
 ## Summary
-Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples of such systems include: household robots, chemical manufacturing processes, autonomous vehicles,
+Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples include: household robots, chemical manufacturing processes, autonomous vehicles,
 or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
 tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot reinforcement learning (RL)_, and taking steps toward realising it in the real-world is the focus of this work.
 
