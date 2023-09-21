@@ -11,13 +11,16 @@ Imagine you've collected a dataset from a system you'd like to control more effi
 or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
 tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot reinforcement learning (RL)_, and taking steps toward realising it in the real-world is the focus of this work.
 
-If our dataset is pseudo-optimal, that is to say, in the case of our domestic robot it tells the full extent of the floorspace, where the tea bags are stored, and how many windows exist,
+If our dataset is pseudo-optimal, that is to say, it tells our domestic robot the full extent of the floorspace, where the tea bags are stored, and how many windows exist,
 then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently. On average it will 
-solve any task you want inside the system with 85% accuracy. However, if the data we've collecting from the system is _suboptimal_ i.e. it doesn't provide all the information required to solve all tasks.
+solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--
 then FB representations fail. They fail because they overestimate the value of the data not present in our dataset, or in RL parlance, they 
 _overestimate out-of-distribution state-action values_. We illustrate this below in the middle plot:
 
-<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
+<figure>
+ <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
+ <figcaption>Fig.1 - Trulli, Puglia, Italy.</figcaption>
+</figure>>
 
 In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
 The family of algorithms we propose are called _Conservative_ Forward Backward representations, illustrated in the right plot above. In experiments across
