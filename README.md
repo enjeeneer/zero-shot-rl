@@ -6,6 +6,12 @@ Original implementations of Conservative Forward Backward representations as pro
 
 [//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
 
+<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
+
+_Figure 1: **Overview.** (Left) Ground truth value functions for two tasks for a given marginal state (Middle)
+FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
+dataset for all tasks. Black dots represent state-action samples present in the dataset._
+
 ## Summary
 Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples of such systems include: household robots, chemical manufacturing processes, autonomous vehicles,
 or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
@@ -15,21 +21,18 @@ If our dataset is pseudo-optimal, that is to say, it tells our domestic robot th
 then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently. On average it will 
 solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--
 then FB representations fail. They fail because they overestimate the value of the data not present in our dataset, or in RL parlance, they 
-_overestimate out-of-distribution state-action values_--Figure 1 (middle).
-
-<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
-
-_Figure 1: **Overview.** (Left) Ground truth value functions for two tasks for a given marginal state (Middle)
-FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
-dataset for all tasks. Black dots represent state-action samples present in the dataset._
+_overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 
 In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
-The family of algorithms we propose are called _Conservative_ Forward Backward representations, illustrated in the right plot above. In experiments across
-a variety of systems, tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal, see below:
+The family of algorithms we propose are called _Conservative_ Forward Backward representations--Figure 1 (Right). In experiments across
+a variety of systems, tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal--Figure 2.
 
 <img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">
 
-We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, so present little downside over their predecessor.
+_Figure 2: **Aggregate performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL.
+(Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
+
+We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessor.
 
 For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen](https://enjeeneer.io) or raise any issue on this repo!
 
