@@ -18,10 +18,10 @@ then FB representations fail. They fail because they overestimate the value of t
 _overestimate out-of-distribution state-action values_--Figure 1 (middle).
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
-_Figure 1: Zero-Shot RL methods must train on a dataset which was collected by a behaviour policy optimising against task $z_{\mathrm{collect}}$,
-yet generalise to new tasks $z_{\mathrm{eval}}$ at test time. Both tasks have associated optimal value functions $Q_{z_{\mathrm{collect}}}^*$
-and $Q_{z_{\mathrm{eval}}}^*$ for a given marginal state. (\textit{Middle}) FB representations overestimate the value of actions not in the
-dataset for all tasks. (\textit{Right}) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
+_Figure 1: Zero-Shot RL methods must train on a dataset which was collected by a behaviour policy optimising one task,
+yet generalise to new tasks. Both tasks have associated optimal value functions and for a given marginal state. (Middle)
+FB representations overestimate the value of actions not in the
+dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
 dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
 In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
