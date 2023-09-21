@@ -19,8 +19,8 @@ _overestimate out-of-distribution state-action values_. We illustrate this below
 
 <figure>
  <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
- <figcaption>Fig.1 - Trulli, Puglia, Italy.</figcaption>
-</figure>>
+ <figcaption>Figure 1. Test <\figcaption>
+</figure>
 
 In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
 The family of algorithms we propose are called _Conservative_ Forward Backward representations, illustrated in the right plot above. In experiments across
