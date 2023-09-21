@@ -23,7 +23,7 @@ solve any task you want inside the system with 85% accuracy. However, if the dat
 FB representations fail. They fail because they overestimate the value of the data not present in our dataset, or in RL parlance, they 
 _overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 
-In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
+In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
 The family of algorithms we propose are called _Conservative_ Forward Backward representations--Figure 1 (Right). In experiments across
 a variety of systems and tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal--Figure 2.
 
