@@ -18,7 +18,8 @@ then FB representations fail. They fail because they overestimate the value of t
 _overestimate out-of-distribution state-action values_--Figure 1 (middle).
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
-Figure 1: **Overview.** (Left) Ground truth value functions for two tasks for a given marginal state (Middle)
+
+_Figure 1: **Overview.** (Left) Ground truth value functions for two tasks for a given marginal state (Middle)
 FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
 dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
