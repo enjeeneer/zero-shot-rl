@@ -7,20 +7,29 @@ Original implementations of Conservative Forward Backward representations as pro
 [//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
 
 ## Summary
+Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples of such systems are: household robots, chemical manufacturing processes, autonomous vehicles,
+or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
+tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot_ reinforcement learning (RL), and realising it in the real-world is the focus of this work.
 
-This work focuses on performing zero-shot reinforcement learning (RL) from suboptimal datasets. In zero-shot RL, we assume the agent
-has access to a dataset of transitions collected from the environment that it can use to build a world model to train its policy against (below (_left_)).
-The existing state-of-the-art method, Forward Backward (FB) representations, does this remarkably well when provided access to large and diverse datasets. 
-However, when the dataset is small or collected from a suboptimal behaviour policy, FB representations fail, specifically by overestimating the value of actions not in the dataset (below (_middle_)).
+We look at building agents to perform zero-shot RL when the data we've collecting from the system is _suboptimal_. When we say suboptimal, we mean the dataset isn't as large or varied as we'd like it to be. 
+For our domestic robot, this may mean the dataset doesn't tell it the extent of the floor, or where the tea-bags are stored, but nevertheless the agent needs to sweep the floor and make our tea. 
+
+If our dataset is pseudo-optimal, that is to say, it tells us effectively everything there is to know about our system, then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently.;
+In fact, it will on average solve any task you want inside the system with 85% accuracy. However, when the dataset is suboptimal, as is the case in any real-world scenario, FB representations fail
+because they overestimate the value of all the data not in our dataset. In RL parlance, we say FB representations 
+_overestimate out-of-distribution state-action values_. We illustrate this below in the middle plot:
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
-As a fix, we propose a family of _Conservative_ Forward Backward representations, which suppresses the value of actions not in the dataset (above (_right_))
+In this work, we resolve this by artifically suppressing these out-of-distribution values, leveraging so-called _conservatism_ from the Offline RL literature.
+The family of algorithms we propose are called _Conservative_ Forward Backward representations, illustrated in the right plot above. In experiments across
+a variety of systems, tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal, see below:
 
 <img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">
 
-In experiments across a variety of domains, tasks and datasets, we show our family of conservative algorithms performs favourably w.r.t vanilla FB (above). For more details
-we direct the reader to the paper linked above.
+We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, so present little downside over their predecessor.
+
+For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen](mailto: srj38@cam.ac.uk) or raise any issue on this repo!
 
 ## Setup
 ### Dependencies
