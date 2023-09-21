@@ -68,7 +68,7 @@ State coverage illustrations on `point_mass_maze` are provided in Figure 3.
 
 _Figure 3: Point-mass maze state coverage by dataset._
 
-For each domain, dataset need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
+For each domain, datasets need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
 To download the `rnd` dataset on the `walker` domain, seperate their command line args with an `_` and run:  
 
 ```bash
