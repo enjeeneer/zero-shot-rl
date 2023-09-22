@@ -131,12 +131,10 @@ class CFB(FB):
     ) -> Dict[str, float]:
         """
         Calculates the loss for the forward-backward representation network.
-        Loss contains three components:
-            1. Forward-backward representation loss: a Bellman update on the successor
-                measure (equation 24, Appendix B)
-            2. Orthonormalisation loss: constrains backward function such that the
-                measure of state s from state s = 1 (equation 26, Appendix B)
-            3. Conservative loss: penalises out-of-distribution actions
+        Loss contains two components:
+            1. Forward-backward representation (core) loss: a Bellman update
+               on the successor measure (equation 24, Appendix B)
+            2. Conservative loss: penalises out-of-distribution actions
         Args:
             observations: observation tensor of shape [batch_size, observation_length]
             actions: action tensor of shape [batch_size, action_length]
