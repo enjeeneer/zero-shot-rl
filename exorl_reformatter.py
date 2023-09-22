@@ -1,6 +1,6 @@
 # pylint: disable=protected-access
 
-"""Reformat the exorl dataset to a single npz file."""
+"""Reformats the exorl dataset to a single .npz file."""
 
 from argparse import ArgumentParser
 from os import listdir
