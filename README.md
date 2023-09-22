@@ -1,12 +1,10 @@
 # Conservative World Models
 
-Original implementations of Conservative Forward Backward representations as proposed in
+Original implementations of _Conservative Forward-Backward Representations_ as proposed in
 
 [Conservative World Models](https://arxiv.org/abs/2110.00468) by
 
 [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/), [Sergey Levine](https://people.eecs.berkeley.edu/~svlevine/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
-
-[Paper](https://arxiv.org/abs/2110.00468)
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
