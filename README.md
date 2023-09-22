@@ -2,7 +2,7 @@
 
 Original implementations of _Conservative Forward-Backward (FB) Representations_ as proposed in
 
-[Conservative World Models](https://arxiv.org/abs/2110.00468)
+[Conservative World Models](REDACTED)
 
 [//]: # (by)
 
