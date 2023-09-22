@@ -1,14 +1,16 @@
 # Conservative World Models
 
-Original implementations of _Conservative Forward-Backward Representations_ as proposed in
+Original implementations of _Conservative Forward-Backward (FB) Representations_ as proposed in
 
-[Conservative World Models](https://arxiv.org/abs/2110.00468) by
+[Conservative World Models](https://arxiv.org/abs/2110.00468)
+
+by
 
 [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/), [Sergey Levine](https://people.eecs.berkeley.edu/~svlevine/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
-_Figure 1: **Overview.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle)
+_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle)
 FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
 dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
