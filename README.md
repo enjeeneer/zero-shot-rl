@@ -22,7 +22,7 @@ tasks may include sweeping the floor, making a cup of tea, or cleaning the windo
 If our dataset is pseudo-optimal, that is to say, it tells our domestic robot the full extent of the floorspace, where the tea bags are stored, and how many windows exist,
 then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently. On average it will 
 solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--then
-FB representations fail. They fail because they overestimate the value of the data not present in our dataset, or in RL parlance, they 
+FB representations fail. They fail because they overestimate the value of the data not present in the dataset, or in RL parlance, they 
 _overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 
 In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature.
