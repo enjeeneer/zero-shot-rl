@@ -2,9 +2,11 @@
 
 Original implementations of Conservative Forward Backward representations as proposed in
 
-[Conservative World Models](https://arxiv.org/abs/2110.00468)  
+[Conservative World Models](https://arxiv.org/abs/2110.00468) by
 
-[//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
+[Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/), [Sergey Levine](https://people.eecs.berkeley.edu/~svlevine/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
+
+[Paper](https://arxiv.org/abs/2110.00468)
 
 <img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
