@@ -1,6 +1,10 @@
 # pylint: disable=protected-access
 
-"""Evaluates the performance of pre-trained agents."""
+"""
+Trains agents on a static, offline dataset and
+evaluates their performance periodically.
+"""
+
 import yaml
 import torch
 from argparse import ArgumentParser
@@ -91,7 +95,13 @@ config["device"] = torch.device(
 set_seed_everywhere(config["seed"])
 
 # setup dataset
-dataset_path = BASE_DIR / "datasets" / config["domain_name"] / config["exploration_algorithm"] / "dataset.npz"
+dataset_path = (
+    BASE_DIR
+    / "datasets"
+    / config["domain_name"]
+    / config["exploration_algorithm"]
+    / "dataset.npz"
+)
 if config["algorithm"] in ("fb", "vcfb", "mcfb", "vcalfb", "mcalfb"):
     relabel = False
 else:
