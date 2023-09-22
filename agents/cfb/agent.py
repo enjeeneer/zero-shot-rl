@@ -147,6 +147,7 @@ class CFB(FB):
             metrics: dictionary of metrics for logging
         """
 
+        # update step common to all FB models
         (
             core_loss,
             core_metrics,
@@ -197,7 +198,7 @@ class CFB(FB):
                 F2=F2,
             )
 
-        # get alpha from conservative penalty
+        # tune alpha from conservative penalty
         alpha, alpha_metrics = self._tune_alpha(
             conservative_penalty=conservative_penalty
         )
@@ -205,6 +206,7 @@ class CFB(FB):
 
         total_loss = core_loss + conservative_loss
 
+        # step optimizer
         self.FB_optimizer.zero_grad(set_to_none=True)
         total_loss.backward()
         for param in self.FB.parameters():
