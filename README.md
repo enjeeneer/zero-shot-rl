@@ -4,61 +4,60 @@ Original implementations of _Conservative Forward-Backward (FB) Representations_
 
 [Conservative World Models](REDACTED)
 
-[//]: # (by)
+by
 
-[//]: # ()
-[//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41;, [Sergey Levine]&#40;https://people.eecs.berkeley.edu/~svlevine/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
+[Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
 
-[//]: # ()
-[//]: # (<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">)
 
-[//]: # ()
-[//]: # (_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** &#40;Left&#41; Ground truth value functions for two tasks in an environment for a given marginal state. &#40;Middle&#41;)
+<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
 
-[//]: # (FB representations overestimate the value of actions not in the dataset for all tasks. &#40;Right&#41; Value-Conservative Forward Backward &#40;VC-FB&#41; Representations suppress the value of actions not in the)
 
-[//]: # (dataset for all tasks. Black dots represent state-action samples present in the dataset._)
+_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle)
 
-[//]: # ()
-[//]: # (## Summary)
+FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the
 
-[//]: # (Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples include: household robots, chemical manufacturing processes, autonomous vehicles,)
+dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
-[//]: # (or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such)
 
-[//]: # (tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot reinforcement learning &#40;RL&#41;_, and taking steps toward realising it in the real-world is the focus of this work.)
+## Summary
 
-[//]: # ()
-[//]: # (If our dataset is pseudo-optimal, that is to say, it tells our domestic robot the full extent of the floorspace, where the tea bags are stored, and how many windows exist,)
+Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples include: household robots, chemical manufacturing processes, autonomous vehicles,
 
-[//]: # (then the existing state-of-the-art method, Forward Backward &#40;FB&#41; representations, performs excellently. On average it will )
+or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
 
-[//]: # (solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--then)
+tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot reinforcement learning (RL)_, and taking steps toward realising it in the real-world is the focus of this work.
 
-[//]: # (FB representations fail. They fail because they overestimate the value of the data not present in the dataset, or in RL parlance, they )
 
-[//]: # (_overestimate out-of-distribution state-action values_--Figure 1 &#40;Middle&#41;.)
+If our dataset is pseudo-optimal, that is to say, it tells our domestic robot the full extent of the floorspace, where the tea bags are stored, and how many windows exist,
 
-[//]: # ()
-[//]: # (In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature.)
+then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently. On average it will 
 
-[//]: # (The family of algorithms we propose are called _Conservative_ Forward Backward representations--Figure 1 &#40;Right&#41;. In experiments across)
+solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--then
 
-[//]: # (a variety of systems and tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal--Figure 2.)
+FB representations fail. They fail because they overestimate the value of the data not present in the dataset, or in RL parlance, they 
 
-[//]: # ()
-[//]: # (<img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">)
+_overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 
-[//]: # ()
-[//]: # (_Figure 2: **Aggregate performance.** &#40;Left&#41; Normalised average performance w.r.t. single-task baseline algorithm CQL.)
 
-[//]: # (&#40;Right&#41; Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._)
+In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature.
 
-[//]: # ()
-[//]: # (We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessor.)
+The family of algorithms we propose are called _Conservative_ Forward Backward representations--Figure 1 (Right). In experiments across
 
-[//]: # ()
-[//]: # (For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen]&#40;https://enjeeneer.io&#41; or raise an issue!)
+a variety of systems and tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal--Figure 2.
+
+
+<img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">
+
+
+_Figure 2: **Aggregate performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL.
+
+(Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
+
+
+We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessor.
+
+
+For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen](https://enjeeneer.io) or raise an issue!
 
 ## Setup
 ### Dependencies
