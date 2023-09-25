@@ -214,4 +214,3 @@ dependencies:
     - wandb==0.15.2
     - wrapt==1.15.0
     - yarg==0.1.9
-prefix: /Users/scottjeen/miniforge3/envs/zero-shot
