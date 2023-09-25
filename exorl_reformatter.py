@@ -27,7 +27,7 @@ for domain, algorithm in domain_algorithm_pairs:
     video_dir = BASE_DIR / f"datasets/{domain}/{algorithm}/video"
     data_fnames = [f for f in listdir(data_dir) if f[-4:] == ".npz"]
     video_fnames = [f for f in listdir(video_dir) if f[-4:] == ".mp4"]
-    new_dataset_path = BASE_DIR / f"datasets/{domain}/{algorithm}"
+    new_dataset_path = BASE_DIR / f"datasets/{domain}/{algorithm}/dataset.npz"
 
     dataset = {}
     logger.info(f"Reformatting {domain} {algorithm} exorl dataset.")
