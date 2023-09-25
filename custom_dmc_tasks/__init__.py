@@ -1,8 +1,6 @@
 """Custom DeepMind Control Suite tasks."""
 
-from custom_dmc_tasks import cheetah
 from custom_dmc_tasks import walker
-from custom_dmc_tasks import hopper
 from custom_dmc_tasks import quadruped
 from custom_dmc_tasks import jaco
 from custom_dmc_tasks import point_mass_maze
@@ -12,14 +10,7 @@ def make(
     domain, task, task_kwargs=None, environment_kwargs=None, visualize_reward=False
 ):
 
-    if domain == "cheetah":
-        return cheetah.make(
-            task,
-            task_kwargs=task_kwargs,
-            environment_kwargs=environment_kwargs,
-            visualize_reward=visualize_reward,
-        )
-    elif domain == "walker":
+    if domain == "walker":
         return walker.make(
             task,
             task_kwargs=task_kwargs,
@@ -28,13 +19,6 @@ def make(
         )
     elif domain == "point_mass_maze":
         return point_mass_maze.make(
-            task,
-            task_kwargs=task_kwargs,
-            environment_kwargs=environment_kwargs,
-            visualize_reward=visualize_reward,
-        )
-    elif domain == "hopper":
-        return hopper.make(
             task,
             task_kwargs=task_kwargs,
             environment_kwargs=environment_kwargs,

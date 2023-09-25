@@ -95,7 +95,7 @@ We provide implementations of the following algorithms:
  | Measure-Conservative FB Representations | Jeen et. al (2023)                                             | `mcfb`|
 
 ### Training
-To train a standard Value-Conservative Forward Backward Representation with the `rnd` dataset to solve all tasks in the `walker` domain, run:
+To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
 ```bash
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```

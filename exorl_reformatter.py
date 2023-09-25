@@ -27,7 +27,7 @@ for domain, algorithm in domain_algorithm_pairs:
     video_dir = BASE_DIR / f"datasets/{domain}/{algorithm}/video"
     data_fnames = [f for f in listdir(data_dir) if f[-4:] == ".npz"]
     video_fnames = [f for f in listdir(video_dir) if f[-4:] == ".mp4"]
-    new_dataset_path = data_dir / "dataset.npz"
+    new_dataset_path = BASE_DIR / f"datasets/{domain}/{algorithm}"
 
     dataset = {}
     logger.info(f"Reformatting {domain} {algorithm} exorl dataset.")
@@ -45,3 +45,7 @@ for domain, algorithm in domain_algorithm_pairs:
 
     for fname in tqdm(video_fnames, desc="Deleting old video files"):
         (video_dir / fname).unlink()
+
+    # delete old directories
+    data_dir.rmdir()
+    video_dir.rmdir()
