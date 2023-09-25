@@ -12,15 +12,15 @@ import subprocess
 
 # Overwrite default config using argparse
 parser = ArgumentParser()
-parser.add_argument("domain_algorithm_pairs", nargs="+")
+parser.add_argument("domain_algorithm_pair", type=str)
 args = parser.parse_args()
 
-domain_algorithm_pairs = [pair.split("_") for pair in args.domain_algorithm_pairs]
+domain_algorithm_pair = [args.domain_algorithm_pair.rsplit("_", 1)]
 
+print(domain_algorithm_pair)
 # download from exorl bucket
-for domain, algorithm in domain_algorithm_pairs:
-    if domain == "pointmass":
-        domain = "point_mass_maze"
+for domain, algorithm in domain_algorithm_pair:
+
     subprocess.call(["bash", "download.sh", domain, algorithm])
 
     data_dir = BASE_DIR / f"datasets/{domain}/{algorithm}/buffer"
