@@ -99,9 +99,6 @@ To train a standard Value-Conservative Forward Backward Representation with the 
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```
 
-### Finetuning
-
-
 ## License 
 This work licensed under a standard MIT License, see `LICENSE.md` for further details.
 
