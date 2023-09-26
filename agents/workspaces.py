@@ -68,8 +68,6 @@ class OnlineRLWorkspace(AbstractWorkspace):
         """
         if self.wandb_logging:
             run = wandb.init(
-                entity="zero-shot-rl",
-                project="new-beginnings",
                 config=agent_config,
                 tags=[agent.name],
                 reinit=True,
@@ -246,8 +244,6 @@ class OfflineRLWorkspace(AbstractWorkspace):
         """
         if self.wandb_logging:
             run = wandb.init(
-                entity="zero-shot-rl",
-                project="new-beginnings",
                 config=agent_config,
                 tags=[agent.name, "core"],
                 reinit=True,
@@ -476,8 +472,6 @@ class FinetuningWorkspace(OfflineRLWorkspace):
 
         if self.wandb_logging:
             run = wandb.init(
-                entity="zero-shot-rl",
-                project="new-beginnings",
                 config=agent_config,
                 tags=[agent.name, "finetuning"],
                 reinit=True,
@@ -612,8 +606,6 @@ class FinetuningWorkspace(OfflineRLWorkspace):
 
         if self.wandb_logging:
             run = wandb.init(
-                entity="zero-shot-rl",
-                project="new-beginnings",
                 config=agent_config,
                 tags=[agent.name, "finetuning"],
                 reinit=True,

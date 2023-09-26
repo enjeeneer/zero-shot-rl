@@ -383,8 +383,6 @@ class AbstractLogger(metaclass=abc.ABCMeta):
 
         if use_wandb:
             wandb.init(
-                project="zero-shot",
-                entity="zero-shot-rl",
                 config=agent_config,
                 tags=wandb_tags,
                 reinit=True,
