@@ -80,8 +80,7 @@ _Figure 3: **State coverage** by dataset on `point_mass_maze`._
 
 ### WandB
 To use [Weights & Biases](https://wandb.ai/home) for logging, create a free account and run `wandb login` from the command line. 
-Then, set the `WANDB_PROJECT` variable in `utils.py` to the name of the project you want to log to.
-Subsequent runs should automatically log to this project.
+Subsequent runs will automatically log to a new project named `conservative-world-models`.
 
 ### Algorithms
 We provide implementations of the following algorithms: 

@@ -7,7 +7,6 @@ import numpy as np
 import torch
 
 BASE_DIR = Path(__file__).resolve().parent
-WANDB_PROJECT = ""
 
 
 def set_seed_everywhere(seed):
@@ -16,4 +15,3 @@ def set_seed_everywhere(seed):
         torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
     random.seed(seed)
-
