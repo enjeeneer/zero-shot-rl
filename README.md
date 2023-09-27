@@ -9,7 +9,7 @@ by
 [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
 
 
-<img src="/media/vcfb-intuition.png" width=70% height=auto class="center">
+<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
 
 
 _Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle) FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
@@ -31,7 +31,7 @@ In this work, we resolve this by artificially suppressing these out-of-distribut
 The family of algorithms we propose are called _Conservative_ Forward Backward representations--Figure 1 (Right). In experiments across
 a variety of systems and tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal--Figure 2.
 
-<img src="/media/performance-profiles-subplot.png" width=70% height=auto class="center">
+<img src="/media/performance-profiles-subplot.png" width=85% height=auto class="center">
 
 _Figure 2: **Aggregate performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
 
