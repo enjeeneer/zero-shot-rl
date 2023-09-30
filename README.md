@@ -2,7 +2,7 @@
 
 Original implementations of _Conservative Forward-Backward (FB) Representations_ as proposed in
 
-[Conservative World Models](REDACTED)
+[Conservative World Models](https://arxiv.org/abs/2309.15178)
 
 by
 
@@ -97,6 +97,18 @@ We provide implementations of the following algorithms:
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
 ```bash
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
+```
+
+### Citation
+If you find this work informative please consider citing the paper!
+```commandline
+@article{jeen2023,
+  url = {https://arxiv.org/abs/2309.15178},
+  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
+  title = {Conservative World Models},
+  publisher = {arXiv},
+  year = {2023},
+}
 ```
 
 ## License 
