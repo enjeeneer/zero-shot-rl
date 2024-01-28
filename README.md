@@ -2,7 +2,7 @@
 
 Original implementations of _Conservative Forward-Backward (FB) Representations_ as proposed in
 
-[Zero-Shot Reinforcement Learnign from Low Quality Data]()
+[Zero-Shot Reinforcement Learning from Low Quality Data]()
 
 [//]: # (by)
 
@@ -10,10 +10,11 @@ Original implementations of _Conservative Forward-Backward (FB) Representations_
 [//]: # ([Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; & [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;)
 
 
-<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
+[//]: # (<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">)
 
-
-_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle) FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
+[//]: # ()
+[//]: # ()
+[//]: # (_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** &#40;Left&#41; Ground truth value functions for two tasks in an environment for a given marginal state. &#40;Middle&#41; FB representations overestimate the value of actions not in the dataset for all tasks. &#40;Right&#41; Value-Conservative Forward Backward &#40;VC-FB&#41; Representations suppress the value of actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._)
 
 
 [//]: # (## Summary)
