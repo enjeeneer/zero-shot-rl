@@ -1,13 +1,6 @@
 # Conservative World Models
 
-Original implementations of _Conservative Forward-Backward (FB) Representations_ as proposed in
-
-[Conservative World Models]()
-
-by
-
-
-[Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) & [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)
+Original implementations of _Conservative Forward-Backward (FB) Representations_.
 
 
 <img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
