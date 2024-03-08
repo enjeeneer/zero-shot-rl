@@ -1,7 +1,7 @@
 # training/eval
 batch_size: 512
 max_buffer_episodes: 5000
-z_inference_steps: 1000
+z_inference_steps: 10000
 discount: 0.98
 eval_frequency: 20000  # how often to evaluate the agent in learning steps
 eval_rollouts: 10  # how many rollouts to average over when evaluating
