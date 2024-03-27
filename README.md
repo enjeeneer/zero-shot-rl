@@ -98,27 +98,37 @@ To train a standard Value-Conservative Forward Backward Representation with the 
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```
 
-### Citation
+[//]: # (### Citation)
 
-If you find this work informative please consider citing the paper!
+[//]: # ()
+[//]: # (If you find this work informative please consider citing the paper!)
 
-```commandline
+[//]: # ()
+[//]: # (```commandline)
 
-@article{jeen2023,
+[//]: # ()
+[//]: # (@article{jeen2023,)
 
-  url = {https://arxiv.org/abs/2309.15178},
+[//]: # ()
+[//]: # (  url = {https://arxiv.org/abs/2309.15178},)
 
-  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
+[//]: # ()
+[//]: # (  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  )
 
-  title = {Conservative World Models},
+[//]: # ()
+[//]: # (  title = {Conservative World Models},)
 
-  publisher = {arXiv},
+[//]: # ()
+[//]: # (  publisher = {arXiv},)
 
-  year = {2023},
+[//]: # ()
+[//]: # (  year = {2023},)
 
-}
+[//]: # ()
+[//]: # (})
 
-```
+[//]: # ()
+[//]: # (```)
 
 ## License 
 This work licensed under a standard MIT License, see `LICENSE.md` for further details.
