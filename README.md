@@ -1,9 +1,7 @@
-# Conservative World Models
+# Zero Shot Reinforcement Learning from Low Quality Data
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/enjeeneer/conservative-world-models/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/enjeeneer/conservative-world-models/tree/main)
 <p align="center">
-<a href="https://github.com/enjeeneer/conservative-world-models/actions"><img alt="Actions Status" src="https://github.com/enjeeneer/conservative-world-models/workflows/Test/badge.svg"></a>
-<a href="https://coveralls.io/github/enjeeneer/conservative-world-models?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/enjeeneer/conservative-world-models/badge.svg?branch=main"></a>
 <a href="https://github.com/psf/black/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
