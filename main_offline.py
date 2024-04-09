@@ -14,11 +14,10 @@ from pathlib import Path
 from agents.base import OfflineReplayBuffer
 from agents.workspaces import OfflineRLWorkspace
 from agents.cql.agent import CQL
-from agents.sac.agent import SAC
 from agents.fb.agent import FB
 from agents.cfb.agent import CFB
-from agents.calfb.agent import CalFB
 from agents.td3.agent import TD3
+from agents.sf.agent import SF
 from agents.fb.replay_buffer import FBReplayBuffer
 from rewards import RewardFunctionConstructor
 from utils import set_seed_everywhere, BASE_DIR
@@ -56,10 +55,10 @@ elif args.wandb_logging == "False":
 else:
     raise ValueError("wandb_logging must be either True or False")
 
-if args.algorithm in ("vcfb", "vcalfb"):
+if args.algorithm in ("vcfb"):
     args.vcfb = True
     args.mcfb = False
-elif args.algorithm in ("mcfb", "mcalfb"):
+elif args.algorithm in ("mcfb"):
     args.vcfb = False
     args.mcfb = True
 
@@ -75,8 +74,12 @@ else:
     args.action_condition = None
 
 working_dir = Path.cwd()
-if args.algorithm in ("vcfb", "mcfb", "vcalfb", "mcalfb"):
+if args.algorithm in ("vcfb", "mcfb"):
     algo_dir = "calfb" if "cal" in args.algorithm else "cfb"
+    config_path = working_dir / "agents" / algo_dir / "config.yaml"
+    model_dir = working_dir / "agents" / algo_dir / "saved_models"
+elif args.algorithm in ("sf-lap", "sf-hilp"):
+    algo_dir = "sf"
     config_path = working_dir / "agents" / algo_dir / "config.yaml"
     model_dir = working_dir / "agents" / algo_dir / "saved_models"
 else:
@@ -224,51 +227,6 @@ elif config["algorithm"] == "td3":
     train_std = None
     eval_std = None
 
-
-elif config["algorithm"] == "sac":
-    agent = SAC(
-        observation_length=observation_length,
-        action_length=action_length,
-        device=config["device"],
-        name=config["name"],
-        batch_size=config["batch_size"],
-        discount=config["discount"],
-        critic_hidden_dimension=config["critic_hidden_dimension"],
-        critic_hidden_layers=config["critic_hidden_layers"],
-        critic_betas=config["critic_betas"],
-        critic_tau=config["critic_tau"],
-        critic_learning_rate=config["critic_learning_rate"],
-        critic_target_update_frequency=config["critic_target_update_frequency"],
-        actor_hidden_dimension=config["actor_hidden_dimension"],
-        actor_hidden_layers=config["actor_hidden_layers"],
-        actor_betas=config["actor_betas"],
-        actor_learning_rate=config["actor_learning_rate"],
-        actor_log_std_bounds=config["actor_log_std_bounds"],
-        alpha_learning_rate=config["alpha_learning_rate"],
-        alpha_betas=config["alpha_betas"],
-        actor_update_frequency=config["actor_update_frequency"],
-        init_temperature=config["init_temperature"],
-        learnable_temperature=config["learnable_temperature"],
-        activation=config["activation"],
-        action_range=action_range,
-        normalisation_samples=None,
-    )
-
-    # load buffer
-    replay_buffer = OfflineReplayBuffer(
-        reward_constructor=reward_constructor,
-        dataset_path=dataset_path,
-        transitions=config["dataset_transitions"],
-        relabel=relabel,
-        task=config["train_task"],
-        device=config["device"],
-        discount=config["discount"],
-    )
-
-    z_inference_steps = None
-    train_std = None
-    eval_std = None
-
 elif config["algorithm"] == "fb":
 
     if config["domain_name"] == "point_mass_maze":
@@ -324,12 +282,12 @@ elif config["algorithm"] == "fb":
     eval_std = config["std_dev_eval"]
 
 
-elif config["algorithm"] in ("vcfb", "mcfb", "vcalfb", "mcalfb"):
+elif config["algorithm"] in ("vcfb", "mcfb"):
     if config["domain_name"] == "point_mass_maze":
         config["discount"] = 0.99
         config["z_dimension"] = 100
 
-    agent = (CalFB if "cal" in config["algorithm"] else CFB)(
+    agent = CFB(
         observation_length=observation_length,
         action_length=action_length,
         preprocessor_hidden_dimension=config["preprocessor_hidden_dimension"],
@@ -366,6 +324,61 @@ elif config["algorithm"] in ("vcfb", "mcfb", "vcalfb", "mcalfb"):
         alpha=config["alpha"],
         target_conservative_penalty=config["target_conservative_penalty"],
         lagrange=config["lagrange"],
+    )
+
+    replay_buffer = FBReplayBuffer(
+        reward_constructor=reward_constructor,
+        dataset_path=dataset_path,
+        transitions=config["dataset_transitions"],
+        relabel=relabel,
+        task=config["train_task"],
+        device=config["device"],
+        discount=config["discount"],
+        action_condition=config["action_condition"],
+    )
+
+    z_inference_steps = config["z_inference_steps"]
+    train_std = config["std_dev_schedule"]
+    eval_std = config["std_dev_eval"]
+
+elif config["algorithm"] == "sf-lap":
+    if config["domain_name"] == "point_mass_maze":
+        config["discount"] = 0.99
+        config["z_dimension"] = 100
+
+    else:
+        raise ValueError(f"Unknown algorithm {config['algorithm']}")
+
+    agent = SF(
+        observation_length=observation_length,
+        action_length=action_length,
+        preprocessor_hidden_dimension=config["preprocessor_hidden_dimension"],
+        preprocessor_output_dimension=config["preprocessor_output_dimension"],
+        preprocessor_hidden_layers=config["preprocessor_hidden_layers"],
+        forward_hidden_dimension=config["forward_hidden_dimension"],
+        forward_hidden_layers=config["forward_hidden_layers"],
+        forward_number_of_features=config["forward_number_of_features"],
+        features_hidden_dimension=config["features_hidden_dimension"],
+        features_hidden_layers=config["features_hidden_layers"],
+        features_activation=config["features_activation"],
+        actor_hidden_dimension=config["actor_hidden_dimension"],
+        actor_hidden_layers=config["actor_hidden_layers"],
+        preprocessor_activation=config["preprocessor_activation"],
+        forward_activation=config["forward_activation"],
+        actor_activation=config["actor_activation"],
+        z_dimension=config["z_dimension"],
+        sf_learning_rate=config["sf_learning_rate"],
+        feature_learning_rate=config["feature_learning_rate"],
+        actor_learning_rate=config["actor_learning_rate"],
+        batch_size=config["batch_size"],
+        gaussian_actor=config["gaussian_actor"],
+        std_dev_clip=config["std_dev_clip"],
+        std_dev_schedule=config["std_dev_schedule"],
+        tau=config["tau"],
+        device=config["device"],
+        name=config["name"],
+        z_mix_ratio=config["z_mix_ratio"],
+        q_loss=True,
     )
 
     replay_buffer = FBReplayBuffer(
