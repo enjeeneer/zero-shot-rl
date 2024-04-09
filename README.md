@@ -1,24 +1,13 @@
 # Zero Shot Reinforcement Learning from Low Quality Data
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/enjeeneer/conservative-world-models/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/enjeeneer/conservative-world-models/tree/main)
-<p align="center">
+<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
+
+_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle) FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
 <a href="https://github.com/psf/black/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
-
-Original implementations of _Conservative Forward-Backward (FB) Representations_.
-
-
-<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
-
-
-
-_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle) FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
-
-
 ## Summary
-
 
 Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples include: household robots, chemical manufacturing processes, autonomous vehicles,
 or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
