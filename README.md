@@ -39,10 +39,13 @@ For further detail we recommend reading the paper. Direct any correspondance to 
 
 ## Setup
 ### Dependencies
-Assuming you have [MuJoCo](https://mujoco.org/) installed, install dependencies using `conda`:
+Assuming you have [MuJoCo](https://mujoco.org/) installed, setup a conda env with [Python 3.9.16](https://www.python.org/downloads/release/python-3916/) using `requirements.txt` as usual:
 ```
-conda env create -f environment.yaml
-conda activate world-models
+conda create --name zsrl python=3.9.16
+```
+then install the dependencies from `requirements.txt`:
+```
+pip install -r requirements.txt
 ```
 
 ### Domains and Datasets
@@ -98,37 +101,37 @@ To train a standard Value-Conservative Forward Backward Representation with the 
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```
 
-[//]: # (### Citation)
+### Citation
 
-[//]: # ()
-[//]: # (If you find this work informative please consider citing the paper!)
 
-[//]: # ()
-[//]: # (```commandline)
+If you find this work informative please consider citing the paper!
 
-[//]: # ()
-[//]: # (@article{jeen2023,)
 
-[//]: # ()
-[//]: # (  url = {https://arxiv.org/abs/2309.15178},)
+```commandline
 
-[//]: # ()
-[//]: # (  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  )
 
-[//]: # ()
-[//]: # (  title = {Conservative World Models},)
+@article{jeen2023,
 
-[//]: # ()
-[//]: # (  publisher = {arXiv},)
 
-[//]: # ()
-[//]: # (  year = {2023},)
+  url = {https://arxiv.org/abs/2309.15178},
 
-[//]: # ()
-[//]: # (})
 
-[//]: # ()
-[//]: # (```)
+  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
+
+
+  title = {Conservative World Models},
+
+
+  publisher = {arXiv},
+
+
+  year = {2023},
+
+
+}
+
+
+```
 
 ## License 
 This work licensed under a standard MIT License, see `LICENSE.md` for further details.
