@@ -108,8 +108,6 @@ If you find this work informative please consider citing the paper!
 
 
 ```commandline
-
-
 @article{jeen2023,
   url = {https://arxiv.org/abs/2309.15178},
   author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
@@ -117,8 +115,6 @@ If you find this work informative please consider citing the paper!
   publisher = {arXiv},
   year = {2023},
 }
-
-
 ```
 
 ## License 
