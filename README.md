@@ -111,23 +111,11 @@ If you find this work informative please consider citing the paper!
 
 
 @article{jeen2023,
-
-
   url = {https://arxiv.org/abs/2309.15178},
-
-
   author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
-
-
   title = {Conservative World Models},
-
-
   publisher = {arXiv},
-
-
   year = {2023},
-
-
 }
 
 
