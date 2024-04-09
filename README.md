@@ -1,11 +1,14 @@
 # Zero Shot Reinforcement Learning from Low Quality Data
 
-<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
-
-_Figure 1: **FB's failure-mode on sub-optimal datasets and VC-FB's resolution.** (Left) Ground truth value functions for two tasks in an environment for a given marginal state. (Middle) FB representations overestimate the value of actions not in the dataset for all tasks. (Right) Value-Conservative Forward Backward (VC-FB) Representations suppress the value of actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
 <a href="https://github.com/psf/black/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+[![PyTorch](https://img.shields.io/badge/PyTorch-grey.svg?logo=PyTorch)](https://pytorch.org/blog/pytorch-1.9-released/) [![Paper](http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg)](https://arxiv.org/abs/2309.15178)
 </p>
+
+<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
+
+_Figure 1: Conservative zero-shot RL methods suppress the values or measures on actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
+
 
 ## Summary
 
@@ -19,9 +22,8 @@ solve any task you want inside the system with 85% accuracy. However, if the dat
 FB representations fail. They fail because they overestimate the value of the data not present in the dataset, or in RL parlance, they
 _overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 
-In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature.
-The family of algorithms we propose are called _Conservative_ Forward Backward representations--Figure 1 (Right). In experiments across
-a variety of systems and tasks, we show these methods consistently outperform FB representations when the datasets are suboptimal--Figure 2.
+In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature--Figure 1 (Right). In experiments across
+a variety of systems and tasks, we show these methods consistently outperform their non-conservative counterparts when the datasets are suboptimal--Figure 2.
 
 <img src="/media/performance-profiles-subplot1.png" width=85% height=auto class="center">
 
@@ -29,7 +31,7 @@ a variety of systems and tasks, we show these methods consistently outperform FB
 _Figure 2: **Aggregate performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
 
 
-We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessor.
+We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessors.
 
 
 For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen](https://enjeeneer.io) or raise an issue!
@@ -80,13 +82,14 @@ Subsequent runs will automatically log to a new project named `conservative-worl
 ### Algorithms
 We provide implementations of the following algorithms: 
 
-| **Algorithm**                           | **Authors**                                                    | **Command Line Argument** |
-|-----------------------------------------|----------------------------------------------------------------| -------------------------------|
- | Conservative $Q$-learning               | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | `cql`|
- | Offline TD3                             | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`|
- | FB Representations                      | [Touati et. al (2022)](https://arxiv.org/abs/2209.14935)                                       | `fb`|
- | Value-Conservative FB Representations   | Jeen et. al (2023)                                             | `vcfb`|
- | Measure-Conservative FB Representations | Jeen et. al (2023)                                             | `mcfb`|
+| **Algorithm**                                                               | **Authors**                                                    | **Command Line Argument** |
+|-----------------------------------------------------------------------------|----------------------------------------------------------------|--------------------------|
+ | Conservative $Q$-learning                                                   | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | `cql`                    |
+ | Offline TD3                                                                 | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`                    |
+| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | `sf-lap`                 |
+ | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       | `fb`                     |
+ | Value-Conservative FB Representations                                       | Jeen et. al (2024)                                             | `vcfb`                   |
+ | Measure-Conservative FB Representations                                     | Jeen et. al (2024)                                             | `mcfb`                   |
 
 ### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
