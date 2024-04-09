@@ -1,10 +1,9 @@
 # Zero Shot Reinforcement Learning from Low Quality Data
 
-<p>
+
 <a href="https://github.com/psf/black/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 [![PyTorch](https://img.shields.io/badge/PyTorch-grey.svg?logo=PyTorch)](https://pytorch.org/get-started/pytorch-2.0/) [![Paper](http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg)](https://arxiv.org/abs/2309.15178)
-</p>
 
 <img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
 
