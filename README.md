@@ -92,8 +92,8 @@ We provide implementations of the following algorithms:
  | Offline TD3                                                                 | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`                    |
 | Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | `sf-lap`                 |
  | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       | `fb`                     |
- | Value-Conservative FB Representations                                       | Jeen et. al (2024)                                             | `vcfb`                   |
- | Measure-Conservative FB Representations                                     | Jeen et. al (2024)                                             | `mcfb`                   |
+ | Value-Conservative FB Representations                                       | anon.                                                          | `vcfb`                   |
+ | Measure-Conservative FB Representations                                     | anon.                                                          | `mcfb`                   |
 
 ### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
