@@ -9,7 +9,7 @@
 
 _Figure 1: Conservative zero-shot RL methods suppress the values or measures on actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
-[//]: # (The is the official codebase for [Zero-Shot Reinforcement Learning from Low Quality Data]&#40;https://arxiv.org/abs/2309.15178&#41; by [Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; and [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;.)
+The is the official codebase for [Zero-Shot Reinforcement Learning from Low Quality Data](https://arxiv.org/abs/2309.15178) by [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) and [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99).
 
 ## Summary
 
@@ -86,14 +86,14 @@ Subsequent runs will automatically log to a new project named `conservative-worl
 ### Algorithms
 We provide implementations of the following algorithms: 
 
-| **Algorithm**                                                               | **Authors**                                                    | **Command Line Argument** |
-|-----------------------------------------------------------------------------|----------------------------------------------------------------|--------------------------|
- | Conservative $Q$-learning                                                   | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | `cql`                    |
+| **Algorithm**                                                               | **Authors**                                                  | **Command Line Argument** |
+|-----------------------------------------------------------------------------|--------------------------------------------------------------|--------------------------|
+ | Conservative $Q$-learning                                                   | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)      | `cql`                    |
  | Offline TD3                                                                 | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`                    |
-| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | `sf-lap`                 |
- | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       | `fb`                     |
- | Value-Conservative FB Representations                                       | anon.                                                          | `vcfb`                   |
- | Measure-Conservative FB Representations                                     | anon.                                                          | `mcfb`                   |
+| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)      | `sf-lap`                 |
+ | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)     | `fb`                     |
+ | Value-Conservative FB Representations                                       | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)       | `vcfb`                   |
+ | Measure-Conservative FB Representations                                     | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)             | `mcfb`                   |
 
 ### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
@@ -101,29 +101,29 @@ To train a standard Value-Conservative Forward Backward Representation with the 
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```
 
-[//]: # (### Citation)
+### Citation
 
-[//]: # ()
-[//]: # ()
-[//]: # (If you find this work informative please consider citing the paper!)
 
-[//]: # ()
-[//]: # ()
-[//]: # (```commandline)
 
-[//]: # (@article{jeen2023,)
+If you find this work informative please consider citing the paper!
 
-[//]: # (  url = {https://arxiv.org/abs/2309.15178},)
 
-[//]: # (  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  )
 
-[//]: # (  title = {Conservative World Models},)
+```commandline
 
-[//]: # (  publisher = {arXiv},)
+@article{jeen2023,
 
-[//]: # (  year = {2023},)
+  url = {https://arxiv.org/abs/2309.15178},
 
-[//]: # (})
+  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
+
+  title = {Conservative World Models},
+
+  publisher = {arXiv},
+
+  year = {2023},
+
+}
 ```
 
 ## License 
