@@ -9,7 +9,7 @@
 
 _Figure 1: Conservative zero-shot RL methods suppress the values or measures on actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
-The is the official codebase for [Zero-Shot Reinforcement Learning from Low Quality Data](https://arxiv.org/abs/2309.15178) by [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) and [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)..
+The is the official codebase for [Zero-Shot Reinforcement Learning from Low Quality Data](https://arxiv.org/abs/2309.15178) by [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) and [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99).
 
 ## Summary
 
