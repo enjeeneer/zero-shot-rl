@@ -1,66 +1,42 @@
 # Zero Shot Reinforcement Learning from Low Quality Data
 
-Anonymised repo for NeurIPS 2024 submission.
 
-[//]: # ()
-[//]: # ()
-[//]: # (<a href="https://github.com/enjeeneer/zero-shot-rl/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>)
+<a href="https://github.com/enjeeneer/zero-shot-rl/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+[![PyTorch](https://img.shields.io/badge/PyTorch-grey.svg?logo=PyTorch)](https://pytorch.org/get-started/pytorch-2.0/) [![Paper](http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg)](https://arxiv.org/abs/2309.15178)
 
-[//]: # (<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>)
+<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
 
-[//]: # ([![PyTorch]&#40;https://img.shields.io/badge/PyTorch-grey.svg?logo=PyTorch&#41;]&#40;https://pytorch.org/get-started/pytorch-2.0/&#41; [![Paper]&#40;http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg&#41;]&#40;https://arxiv.org/abs/2309.15178&#41;)
+_Figure 1: Conservative zero-shot RL methods suppress the values or measures on actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._
 
-[//]: # ()
-[//]: # (<img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">)
+The is the official codebase for [Zero-Shot Reinforcement Learning from Low Quality Data](https://arxiv.org/abs/2309.15178) by [Scott Jeen](https://enjeeneer.io/), [Tom Bewley](https://tombewley.com/) and [Jonathan Cullen](http://www.eng.cam.ac.uk/profiles/jmc99)..
 
-[//]: # ()
-[//]: # (_Figure 1: Conservative zero-shot RL methods suppress the values or measures on actions not in the  dataset for all tasks. Black dots represent state-action samples present in the dataset._)
+## Summary
 
-[//]: # ()
-[//]: # (The is the official codebase for [Zero-Shot Reinforcement Learning from Low Quality Data]&#40;https://arxiv.org/abs/2309.15178&#41; by [Scott Jeen]&#40;https://enjeeneer.io/&#41;, [Tom Bewley]&#40;https://tombewley.com/&#41; and [Jonathan Cullen]&#40;http://www.eng.cam.ac.uk/profiles/jmc99&#41;.)
+Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples include: household robots, chemical manufacturing processes, autonomous vehicles,
+or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such
+tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot reinforcement learning (RL)_, and taking steps toward realising it in the real-world is the focus of this work.
 
-[//]: # ()
-[//]: # (## Summary)
+If our dataset is pseudo-optimal, that is to say, it tells our domestic robot the full extent of the floorspace, where the tea bags are stored, and how many windows exist,
+then the existing state-of-the-art method, Forward Backward (FB) representations, performs excellently. On average it will
+solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--then
+FB representations fail. They fail because they overestimate the value of the data not present in the dataset, or in RL parlance, they
+_overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 
-[//]: # ()
-[//]: # (Imagine you've collected a dataset from a system you'd like to control more efficiently. Examples include: household robots, chemical manufacturing processes, autonomous vehicles,)
+In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature--Figure 1 (Right). In experiments across
+a variety of systems and tasks, we show these methods consistently outperform their non-conservative counterparts when the datasets are suboptimal--Figure 2.
 
-[//]: # (or steel-making furnaces. An ideal solution would be to train an autonomous agent on your dataset, then for it to use what it learns to solve _any_ task inside the system. For our household robot, such)
+<img src="/media/performance-profiles-subplot1.png" width=85% height=auto class="center">
 
-[//]: # (tasks may include sweeping the floor, making a cup of tea, or cleaning the windows. Formally, we call this problem setting _zero-shot reinforcement learning &#40;RL&#41;_, and taking steps toward realising it in the real-world is the focus of this work.)
 
-[//]: # ()
-[//]: # (If our dataset is pseudo-optimal, that is to say, it tells our domestic robot the full extent of the floorspace, where the tea bags are stored, and how many windows exist,)
+_Figure 2: **Aggregate performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
 
-[//]: # (then the existing state-of-the-art method, Forward Backward &#40;FB&#41; representations, performs excellently. On average it will)
 
-[//]: # (solve any task you want inside the system with 85% accuracy. However, if the data we've collected from the system is _suboptimal_--it doesn't provide all the information required to solve all tasks--then)
+We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessors.
 
-[//]: # (FB representations fail. They fail because they overestimate the value of the data not present in the dataset, or in RL parlance, they)
 
-[//]: # (_overestimate out-of-distribution state-action values_--Figure 1 &#40;Middle&#41;.)
+For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen](https://enjeeneer.io) or raise an issue!
 
-[//]: # ()
-[//]: # (In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature--Figure 1 &#40;Right&#41;. In experiments across)
-
-[//]: # (a variety of systems and tasks, we show these methods consistently outperform their non-conservative counterparts when the datasets are suboptimal--Figure 2.)
-
-[//]: # ()
-[//]: # (<img src="/media/performance-profiles-subplot1.png" width=85% height=auto class="center">)
-
-[//]: # ()
-[//]: # ()
-[//]: # (_Figure 2: **Aggregate performance.** &#40;Left&#41; Normalised average performance w.r.t. single-task baseline algorithm CQL. &#40;Right&#41; Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._)
-
-[//]: # ()
-[//]: # ()
-[//]: # (We also find that our proposals don't sacrifice performance when the dataset is pseudo-optimal, and so present little downside over their predecessors.)
-
-[//]: # ()
-[//]: # ()
-[//]: # (For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen]&#40;https://enjeeneer.io&#41; or raise an issue!)
-
-[//]: # ()
 ## Setup
 ### Dependencies
 Assuming you have [MuJoCo](https://mujoco.org/) installed, setup a conda env with [Python 3.9.16](https://www.python.org/downloads/release/python-3916/) using `requirements.txt` as usual:
@@ -110,14 +86,14 @@ Subsequent runs will automatically log to a new project named `conservative-worl
 ### Algorithms
 We provide implementations of the following algorithms: 
 
-| **Algorithm**                                                               | **Authors**                                                    | **Command Line Argument** |
-|-----------------------------------------------------------------------------|----------------------------------------------------------------|--------------------------|
- | Conservative $Q$-learning                                                   | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | `cql`                    |
+| **Algorithm**                                                               | **Authors**                                                  | **Command Line Argument** |
+|-----------------------------------------------------------------------------|--------------------------------------------------------------|--------------------------|
+ | Conservative $Q$-learning                                                   | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)      | `cql`                    |
  | Offline TD3                                                                 | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`                    |
-| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | `sf-lap`                 |
- | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       | `fb`                     |
- | Value-Conservative FB Representations                                       | anon.                                                          | `vcfb`                   |
- | Measure-Conservative FB Representations                                     | anon.                                                          | `mcfb`                   |
+| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)      | `sf-lap`                 |
+ | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)     | `fb`                     |
+ | Value-Conservative FB Representations                                       | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)       | `vcfb`                   |
+ | Measure-Conservative FB Representations                                     | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)             | `mcfb`                   |
 
 ### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
@@ -125,37 +101,25 @@ To train a standard Value-Conservative Forward Backward Representation with the 
 python main_offline.py vcfb walker rnd --eval_task stand run walk flip
 ```
 
-[//]: # (### Citation)
+### Citation
 
-[//]: # ()
-[//]: # (If you find this work informative please consider citing the paper!)
+If you find this work informative please consider citing the paper!
 
-[//]: # ()
-[//]: # ()
-[//]: # (```commandline)
 
-[//]: # (@article{jeen2023,)
+```commandline
+@article{jeen2023,
+  url = {https://arxiv.org/abs/2309.15178},
+  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
+  title = {Zero-Shot Reinforcement Learning from Low Quality Data},
+  publisher = {arXiv},
+  year = {2023},
+}
+```
 
-[//]: # (  url = {https://arxiv.org/abs/2309.15178},)
-
-[//]: # (  author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  )
-
-[//]: # (  title = {Zero-Shot Reinforcement Learning from Low Quality Data},)
-
-[//]: # (  publisher = {arXiv},)
-
-[//]: # (  year = {2023},)
-
-[//]: # (})
-
-[//]: # (```)
-
-[//]: # ()
 ## License 
 This work licensed under a standard MIT License, see `LICENSE.md` for further details.
 
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # ()
+
+
+
+
