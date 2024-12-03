@@ -37,7 +37,21 @@ then install the dependencies from `requirements.txt`:
 pip install -r requirements.txt
 ```
 
-### ExORL Domains and Datasets
+## Algorithms
+We provide implementations of the following algorithms: 
+
+| **Algorithm**                                                              | **Authors**                                                    | Type                   | **Command Line Argument** |
+|----------------------------------------------------------------------------|----------------------------------------------------------------|------------------------|--------------------------|
+ | Conservative $Q$-learning                                                  | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | Single-task Offline RL | `cql`                    |
+ | Offline TD3                                                                | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | Single-task Offline RL | `td3`                    |
+| Goal-conditioned Implicit $Q$-Learning (GC-IQL)                            | [Park et. al (2023)](https://arxiv.org/abs/2307.11949)         | Goal-conditioned RL    | `gciql`                  |
+| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | Zero-shot RL           | `sf-lap`                 |
+ | FB Representations                                                         | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       |  Zero-shot RL                      | `fb`                     |
+ | Value-Conservative FB Representations                                      | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)         |  Zero-shot RL                      | `vcfb`                   |
+ | Measure-Conservative FB Representations                                    | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)         |  Zero-shot RL                      | `mcfb`                   |
+
+## Domains and Datasets
+### ExORL
 In the paper we report results with agents trained on datasets collected from different exploratory algorithms on different domains. The domains are:
 
 | **Domain** | **Eval Tasks**                                                              | **Dimensionality** | **Type**      | **Reward** | **Command Line Argument** |
@@ -55,7 +69,7 @@ and the dataset collecting algorithms are:
  | [Diversity is All You Need (DIAYN)](https://arxiv.org/abs/1802.06070)                                 | Medium                    | `diayn`                  |
  | Random                                                                | Low                       | `random`                 |
 
-State coverage illustrations on `point_mass_maze` are provided in Figure 3. For each domain, datasets need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
+State coverage illustrations on `point_mass_maze` are provided in Figure 4. For each domain, datasets need to be downloaded manually from the [ExORL benchmark](https://github.com/denisyarats/exorl/tree/main) then reformatted. 
 To download the `rnd` dataset on the `walker` domain, seperate their command line args with an `_` and run:  
 
 ```bash
@@ -66,32 +80,36 @@ this will create a single `dataset.npz` file in the `dataset/walker/rnd/buffer` 
 
 <img src="/media/dataset-heatmap.png" width=70% height=auto class="center">
 
-_Figure 3: **State coverage** by dataset on `point_mass_maze`._
+_Figure 4: **State coverage** by dataset on `point_mass_maze`._
 
-### WandB
-To use [Weights & Biases](https://wandb.ai/home) for logging, create a free account and run `wandb login` from the command line. 
-Subsequent runs will automatically log to a new project named `conservative-world-models`.
-
-### Algorithms
-We provide implementations of the following algorithms: 
-
-| **Algorithm**                                                              | **Authors**                                                    | Type                   | **Command Line Argument** |
-|----------------------------------------------------------------------------|----------------------------------------------------------------|------------------------|--------------------------|
- | Conservative $Q$-learning                                                  | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | Single-task Offline RL | `cql`                    |
- | Offline TD3                                                                | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | Single-task Offline RL | `td3`                    |
-| Goal-conditioned Implicit $Q$-Learning (GC-IQL)                            | [Park et. al (2023)](https://arxiv.org/abs/2307.11949)         | Goal-conditioned RL    | `gciql`                  |
-| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | Zero-shot RL           | `sf-lap`                 |
- | FB Representations                                                         | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       |  Zero-shot RL                      | `fb`                     |
- | Value-Conservative FB Representations                                      | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)         |  Zero-shot RL                      | `vcfb`                   |
- | Measure-Conservative FB Representations                                    | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)         |  Zero-shot RL                      | `mcfb`                   |
-
-### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
 ```bash
-python main_offline.py vcfb walker rnd --eval_task stand run walk flip
+python main_exorl.py vcfb walker rnd --eval_task stand run walk flip
 ```
 
-### Citation
+### D4RL
+In the paper we report results on:
+
+| **Domain**     | **Command Line Argument** |
+|----------------|--------------------------|
+| Walker         | `walker`                 |
+| Cheetah        | `cheetah`                |
+
+trained on the following datasets:
+
+| **Datasets**  | **Description**                                                                                                                                                    | **Command Line Argument** |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+ | Medium        | Generated by training an SAC policy, early-stopping the training, and collecting 1M samples from this partially-trained policy                                     | `medium`                  |
+ | Medium-replay | Generated by recording all samples in the replay buffer observed during training until the policy reaches the “medium” level of performance.                       | `medium-replay`           |
+ | Medium-expert | Generated by mixing equal amounts of expert demonstrations and suboptimal data, either from a partially trained policy or by unrolling a uniform-at-random policy. | `medium-expert`           |
+
+You'll need to manually download the D4RL datasets following their instructions, rename them to `dataset.hdf5` and place them in the correct directory inside `/datasets` e.g. the `walker` `medium-expert` dataset should be saved to `datasets/walker/medium-expert/dataset.hdf5`.
+To train a standard Value-Conservative Forward Backward Representation with the `medium-expert` dataset on `walker`, run:
+```bash
+python main_d4rl.py vcfb walker medium-expert
+```
+
+## Citation
 
 If you find this work informative please consider citing the paper!
 
