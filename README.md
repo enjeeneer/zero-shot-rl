@@ -3,7 +3,7 @@
 ## NeurIPS 2024
 <a href="https://github.com/enjeeneer/zero-shot-rl/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-[![PyTorch](https://img.shields.io/badge/PyTorch-grey.svg?logo=PyTorch)](https://pytorch.org/get-started/pytorch-2.0/) [![Paper](http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg)](https://arxiv.org/abs/2309.15178)
+ [![Paper](http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg)](https://arxiv.org/abs/2309.15178)
 
 <img src="/media/vcfb-intuition-final.png" width=85% height=auto class="center">
 
@@ -13,17 +13,18 @@ The is the official codebase for [Zero-Shot Reinforcement Learning from Low Qual
 
 ## Summary
 
-This work proposes methods for performing zero-shot RL when the pre-training datasets are small and homogeneous. We show that by suppressing the predicted values (or measures) for actions not in the dataset, we can resolve overestimation issues that arise when the dataset is inexhaustive. We demonstrate this on the ExORL benchmark, showing that our proposed methods can solve tasks with small, homogeneous datasets where existing methods fail.
+This work proposes methods for performing zero-shot RL when the pre-training datasets are small and homogeneous. 
+We show that by suppressing the predicted values (or measures) for actions not in the dataset (Figure 1), we can resolve an overestimation bias that arises when the dataset is inexhaustive. We demonstrate this on the ExORL (Figure 2) and D4RL (Figure 3) benchmarks, showing improved performance over existing works.
 
 <img src="/media/performance-profiles-subplot2.png" width=85% height=auto class="center">
 
 
 _Figure 2: **Aggregate ExORL performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
 
-_Figure 2: **Aggregate D4RL performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
+_Figure 3: **Aggregate D4RL performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
 
 
-For further detail we recommend reading the paper. Direct any correspondance to [Scott Jeen](https://enjeeneer.io) or raise an issue!
+For further detail check out the paper. Direct any correspondance to [Scott Jeen](https://enjeeneer.io) or raise an issue!
 
 ## Setup
 ### Dependencies
@@ -74,14 +75,15 @@ Subsequent runs will automatically log to a new project named `conservative-worl
 ### Algorithms
 We provide implementations of the following algorithms: 
 
-| **Algorithm**                                                               | **Authors**                                                  | **Command Line Argument** |
-|-----------------------------------------------------------------------------|--------------------------------------------------------------|--------------------------|
- | Conservative $Q$-learning                                                   | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)      | `cql`                    |
- | Offline TD3                                                                 | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | `td3`                    |
-| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)      | `sf-lap`                 |
- | FB Representations                                                          | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)     | `fb`                     |
- | Value-Conservative FB Representations                                       | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)       | `vcfb`                   |
- | Measure-Conservative FB Representations                                     | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)             | `mcfb`                   |
+| **Algorithm**                                                              | **Authors**                                                    | Type                   | **Command Line Argument** |
+|----------------------------------------------------------------------------|----------------------------------------------------------------|------------------------|--------------------------|
+ | Conservative $Q$-learning                                                  | [Kumar et. al (2020)](https://arxiv.org/abs/2006.04779)        | Single-task Offline RL | `cql`                    |
+ | Offline TD3                                                                | [Fujimoto et. al (2021)](https://arxiv.org/pdf/2106.06860.pdf) | Single-task Offline RL | `td3`                    |
+| Goal-conditioned Implicit $Q$-Learning (GC-IQL)                            | [Park et. al (2023)](https://arxiv.org/abs/2307.11949)         | Goal-conditioned RL    | `gciql`                  |
+| Universal Successor Features learned with Laplacian Eigenfunctions (SF-LAP) | [Borsa et. al (2018)](https://arxiv.org/abs/1812.07626)        | Zero-shot RL           | `sf-lap`                 |
+ | FB Representations                                                         | [Touati et. al (2023)](https://arxiv.org/abs/2209.14935)       |  Zero-shot RL                      | `fb`                     |
+ | Value-Conservative FB Representations                                      | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)         |  Zero-shot RL                      | `vcfb`                   |
+ | Measure-Conservative FB Representations                                    | [Jeen et. al (2024)](https://arxiv.org/abs/2309.15178)         |  Zero-shot RL                      | `mcfb`                   |
 
 ### Training
 To train a standard Value-Conservative Forward Backward Representation with the `rnd` (100k) dataset to solve all tasks in the `walker` domain, run:
