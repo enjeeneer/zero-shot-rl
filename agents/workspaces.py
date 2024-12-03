@@ -19,181 +19,13 @@ from agents.base import AbstractWorkspace
 from agents.fb.agent import FB
 from agents.fb.replay_buffer import FBReplayBuffer, OnlineFBReplayBuffer
 
-from agents.sac.agent import SAC
-from agents.sac.replay_buffer import SoftActorCriticReplayBuffer
-
 from agents.cql.agent import CQL
 from agents.base import OfflineReplayBuffer
 
 from agents.cfb.agent import CFB
-from agents.calfb.agent import CalFB
 
-
-class OnlineRLWorkspace(AbstractWorkspace):
-    """
-    Trains/evals/rollouts online RL algorithm on one task
-    """
-
-    def __init__(
-        self,
-        reward_constructor: RewardFunctionConstructor,
-        learning_steps: int,
-        model_dir: Path,
-        eval_frequency: int,
-        eval_rollouts: int,
-        seed_steps: int,
-        wandb_logging: bool = True,
-    ):
-        super().__init__(
-            env=reward_constructor._env,
-            reward_functions=reward_constructor.reward_functions,
-        )
-
-        self.eval_frequency = eval_frequency  # how frequently to eval
-        self.eval_rollouts = eval_rollouts  # how many rollouts per eval step
-        self.model_dir = model_dir
-        self.learning_steps = learning_steps
-        self.seed_steps = seed_steps
-        self.wandb_logging = wandb_logging
-
-    def train(
-        self,
-        agent: SAC,
-        task: str,
-        agent_config: Dict,
-        replay_buffer: SoftActorCriticReplayBuffer,
-    ):
-        """
-        Trains online RL algorithm on one task.
-        """
-        if self.wandb_logging:
-            run = wandb.init(
-                config=agent_config,
-                tags=[agent.name],
-                reinit=True,
-            )
-
-            model_path = self.model_dir / run.name
-            makedirs(str(model_path))
-
-        else:
-            date = datetime.today().strftime("%Y-%m-%d-%H-%M-%S")
-            model_path = self.model_dir / f"local-run-{date}"
-            makedirs(str(model_path))
-
-        logger.info(f"Training {agent.name}")
-        best_eval_reward = -np.inf
-        best_model_path = None
-        done = True
-
-        for i in tqdm(range(self.learning_steps + 1)):
-
-            # reset env
-            if done:
-                timestep = self.env.reset()
-
-            # sample actions uniformly for seed steps
-            if i < self.seed_steps:
-                action = np.random.uniform(
-                    low=-1, high=1, size=(self.env.action_spec().shape[0],)
-                )
-
-            else:
-                action = agent.act(
-                    timestep.observation["observations"],
-                    sample=True,
-                    replay_buffer=replay_buffer,
-                )
-
-            observation = timestep.observation["observations"]
-            timestep = self.env.step(action)
-            reward = self.reward_functions[task](self.env.physics)
-            done = timestep.last()
-
-            replay_buffer.add(
-                observation=observation,
-                action=action,
-                reward=reward,
-                next_observation=timestep.observation["observations"],
-                done=done,
-            )
-
-            eval_metrics = {}
-            if (i % self.eval_frequency == 0) & (i > 0):
-                eval_metrics = self.eval(agent=agent, task=task)
-                if eval_metrics["eval/episode_reward_iqm"] > best_eval_reward:
-
-                    # delete current best model
-                    if best_model_path is not None:
-                        best_model_path.unlink(missing_ok=True)
-
-                    logger.info(
-                        f"New max eval reward: {best_eval_reward:.3f} -> "
-                        f"{eval_metrics['eval/episode_reward_iqm']:.3f}."
-                        f" Saving model."
-                    )
-
-                    name = f"{task}_{i}.pickle"
-                    # save locally
-                    best_model_path = agent.save(model_path / name)
-
-                    best_eval_reward = eval_metrics["eval/episode_reward_iqm"]
-
-                agent.train()
-
-            train_metrics = {}
-            if (i % agent.actor_update_frequency == 0) and (i > self.seed_steps):
-                batch = replay_buffer.sample(agent.batch_size)
-                train_metrics = agent.update(batch=batch, step=i)
-
-            metrics = {**train_metrics, **eval_metrics}
-
-            if self.wandb_logging:
-                run.log(metrics)
-
-        if self.wandb_logging:
-            # upload best model to wandb at end of training
-            run.save(best_model_path.as_posix(), base_path=model_path.as_posix())
-            run.finish()
-
-        # delete local models
-        shutil.rmtree(model_path)
-
-    def eval(
-        self,
-        agent: SAC,
-        task: str,
-    ) -> Dict[str, float]:
-        """
-        Performs eval rollouts.
-        Args:
-            agent: agent to evaluate
-            task: task to evaluate on
-        Returns:
-            metrics: dict of metrics
-        """
-
-        logger.info("Performing eval rollouts.")
-        eval_rewards = []
-        agent.eval()
-        for _ in tqdm(range(self.eval_rollouts)):
-
-            rollout_reward = 0.0
-            timestep = self.env.reset()
-            while not timestep.last():
-                action = agent.act(
-                    timestep.observation["observations"], sample=False, step=None
-                )
-                timestep = self.env.step(action)
-                rollout_reward += self.reward_functions[task](self.env.physics)
-
-            eval_rewards.append(rollout_reward)
-
-        metrics = {
-            "eval/episode_reward_iqm": float(stats.trim_mean(eval_rewards, 0.25))
-        }
-
-        return metrics
+from agents.sf.agent import SF
+from agents.base import D4RLReplayBuffer
 
 
 class OfflineRLWorkspace(AbstractWorkspace):
@@ -234,7 +66,7 @@ class OfflineRLWorkspace(AbstractWorkspace):
 
     def train(
         self,
-        agent: Union[CQL, SAC, FB, CFB, CalFB],
+        agent: Union[CQL, FB, CFB],
         tasks: List[str],
         agent_config: Dict,
         replay_buffer: Union[OfflineReplayBuffer, FBReplayBuffer],
@@ -320,7 +152,7 @@ class OfflineRLWorkspace(AbstractWorkspace):
 
     def eval(
         self,
-        agent: Union[CQL, SAC, FB, CFB, CalFB],
+        agent: Union[CQL, FB, CFB],
         tasks: List[str],
     ) -> Dict[str, float]:
         """
@@ -428,7 +260,7 @@ class FinetuningWorkspace(OfflineRLWorkspace):
 
     def train(
         self,
-        agent: Union[FB, CFB, CalFB],
+        agent: Union[FB, CFB],
         tasks: List[str],
         agent_config: Dict,
         replay_buffer: Union[FBReplayBuffer, OnlineFBReplayBuffer],
@@ -456,7 +288,7 @@ class FinetuningWorkspace(OfflineRLWorkspace):
 
     def tune_offline(
         self,
-        agent: Union[FB, CFB, CalFB],
+        agent: Union[FB, CFB],
         task: List[str],
         agent_config: Dict,
         replay_buffer: FBReplayBuffer,
@@ -588,7 +420,7 @@ class FinetuningWorkspace(OfflineRLWorkspace):
 
     def tune_online(
         self,
-        agent: Union[FB, CFB, CalFB],
+        agent: Union[FB, CFB],
         task: List[str],
         agent_config: Dict,
         replay_buffer: OnlineFBReplayBuffer,
@@ -748,3 +580,145 @@ class FinetuningWorkspace(OfflineRLWorkspace):
         if self.wandb_logging:
             # save to wandb_logging
             run.finish()
+
+
+class D4RLWorkspace:
+    """
+    Workspace for training agents on D4RL tasks.
+    """
+
+    def __init__(
+        self,
+        env,
+        domain_name: str,
+        learning_steps: int,
+        model_dir: Path,
+        eval_frequency: int,
+        eval_rollouts: int,
+        wandb_logging: bool,
+        device: torch.device,
+        wandb_project: str,
+        wandb_entity: str,
+        z_inference_steps: Optional[int] = None,  # FB only
+    ):
+        self.env = env
+        self.domain_name = domain_name
+        self.learning_steps = learning_steps
+        self.model_dir = model_dir
+        self.eval_frequency = eval_frequency
+        self.eval_rollouts = eval_rollouts
+        self.wandb_logging = wandb_logging
+        self.device = device
+        self.wandb_project = wandb_project
+        self.wandb_entity = wandb_entity
+        self.z_inference_steps = z_inference_steps
+        self.ref_max_score = {
+            "walker": 4592.3,
+            "cheetah": 12135.0,
+        }
+        self.ref_min_score = {
+            "cheetah": -280.178953,
+            "walker": 1.629008,
+        }
+
+    def train(
+        self,
+        agent: Union[FB, CFB, SF],
+        agent_config: Dict,
+        replay_buffer: D4RLReplayBuffer,
+    ) -> None:
+
+        if self.wandb_logging:
+            run = wandb.init(
+                entity=self.wandb_entity,
+                project=self.wandb_project,
+                config=agent_config,
+                tags=[agent.name, "D4RL"],
+                reinit=True,
+            )
+
+        logger.info(f"Training {agent.name}.")
+        best_mean_task_reward = -np.inf
+
+        # sample set transitions for z inference
+        if isinstance(agent, (FB, SF)):
+            (
+                self.goals_z,
+                self.rewards_z,
+            ) = replay_buffer.sample_task_inference_transitions(
+                inference_steps=self.z_inference_steps,
+            )
+
+        for i in tqdm(range(self.learning_steps + 1)):
+
+            batch = replay_buffer.sample(agent.batch_size)
+            train_metrics = agent.update(batch=batch, step=i)
+
+            eval_metrics = {}
+
+            if i % self.eval_frequency == 0:
+                eval_metrics = self.eval(agent=agent)
+
+                if eval_metrics["eval/score"] > best_mean_task_reward:
+                    new_best_mean_task_reward = eval_metrics["eval/score"]
+                    logger.info(
+                        f"New max IQM task reward: {best_mean_task_reward:.3f} -> "
+                        f"{new_best_mean_task_reward:.3f}."
+                    )
+
+                    best_mean_task_reward = new_best_mean_task_reward
+
+                agent.train()
+
+            metrics = {**train_metrics, **eval_metrics}
+
+            if self.wandb_logging:
+                run.log(metrics)
+
+        if self.wandb_logging:
+            run.finish()
+
+    def eval(self, agent: Union[FB, CFB, SF]):
+        """
+        Evals agent.
+        """
+
+        logger.info(f"Evaluating {agent.name}.")
+
+        if isinstance(agent, (FB, SF)):
+            z = agent.infer_z(self.goals_z, self.rewards_z)
+
+        eval_rewards = np.zeros(self.eval_rollouts)
+
+        for i in tqdm(range(self.eval_rollouts), desc="eval rollouts"):
+
+            observation = self.env.reset()
+            terminated = False
+            rollout_reward = 0.0
+
+            while not terminated:
+                if isinstance(agent, (FB, SF)):
+                    action, _ = agent.act(
+                        observation=observation, task=z, sample=False, step=None
+                    )
+                else:
+                    action = agent.act(observation=observation, sample=False, step=None)
+                observation, reward, terminated, _ = self.env.step(action)
+                rollout_reward += reward
+
+            eval_rewards[i] = rollout_reward
+
+        eval_rewards = self._get_normalised_score(eval_rewards)
+        metrics = {"eval/score": float(stats.trim_mean(eval_rewards, 0.25))}
+
+        return metrics
+
+    def _get_normalised_score(self, score: np.ndarray):
+        return (
+            (score - self.ref_min_score[self.domain_name])
+            / (
+                self.ref_max_score[self.domain_name]
+                - self.ref_min_score[self.domain_name]
+            )
+            * 100
+        )

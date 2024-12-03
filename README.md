@@ -37,7 +37,7 @@ then install the dependencies from `requirements.txt`:
 pip install -r requirements.txt
 ```
 
-### Domains and Datasets
+### ExORL Domains and Datasets
 In the paper we report results with agents trained on datasets collected from different exploratory algorithms on different domains. The domains are:
 
 | **Domain** | **Eval Tasks**                                                              | **Dimensionality** | **Type**      | **Reward** | **Command Line Argument** |
@@ -97,12 +97,12 @@ If you find this work informative please consider citing the paper!
 
 
 ```commandline
-@article{jeen2023,
+@article{jeen2024,
   url = {https://arxiv.org/abs/2309.15178},
   author = {Jeen, Scott and Bewley, Tom and Cullen, Jonathan M.},  
   title = {Zero-Shot Reinforcement Learning from Low Quality Data},
-  publisher = {arXiv},
-  year = {2023},
+  journal = {Advances in Neural Information Processing Systems 38},
+  year = {2024},
 }
 ```
 

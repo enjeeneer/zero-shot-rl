@@ -6,14 +6,13 @@ import abc
 import numpy as np
 import torch
 import wandb
+import h5py
 import dataclasses
 from tqdm import tqdm
 from loguru import logger
 from copy import deepcopy
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict
-from utils import BASE_DIR
-from os import makedirs
 
 from agents.utils import TruncatedNormal, squashed_gaussian
 from rewards import RewardFunctionConstructor
@@ -275,6 +274,101 @@ class DoubleQCritic(torch.nn.Module):
         self.outputs["q2"] = q2
 
         return q1, q2
+
+
+class VCritic(torch.nn.Module):
+    """
+    State value function.
+    """
+
+    def __init__(
+        self,
+        observation_length: int,
+        hidden_dimension: int,
+        hidden_layers: int,
+        activation: str,
+        device: torch.device,
+        layernorm: bool = False,
+    ):
+        super().__init__()
+
+        self.V = AbstractCritic(
+            observation_length=observation_length,
+            action_length=0,
+            hidden_dimension=hidden_dimension,
+            hidden_layers=hidden_layers,
+            activation=activation,
+            device=device,
+            layernorm=layernorm,
+        )
+        self.outputs = {}
+
+    def forward(self, observation: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Passes obs-action pair through q functions.
+        Args:
+            observation: tensor of shape [batch_dimension, observation_length]
+        Returns:
+            v1: value from first v function
+        """
+
+        v = self.V.forward(observation)
+
+        self.outputs["v"] = v
+
+        return v
+
+
+class DoubleVCritic(torch.nn.Module):
+    """
+    Double state value function.
+    """
+
+    def __init__(
+        self,
+        observation_length: int,
+        hidden_dimension: int,
+        hidden_layers: int,
+        activation: str,
+        device: torch.device,
+        layernorm: bool = False,
+    ):
+        super().__init__()
+
+        self.V1 = VCritic(
+            observation_length=observation_length,
+            hidden_dimension=hidden_dimension,
+            hidden_layers=hidden_layers,
+            activation=activation,
+            device=device,
+            layernorm=layernorm,
+        )
+        self.V2 = VCritic(
+            observation_length=observation_length,
+            hidden_dimension=hidden_dimension,
+            hidden_layers=hidden_layers,
+            activation=activation,
+            device=device,
+            layernorm=layernorm,
+        )
+        self.outputs = {}
+
+    def forward(self, observation: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Passes obs-action pair through q functions.
+        Args:
+            observation: tensor of shape [batch_dimension, observation_length]
+        Returns:
+            v1: value from first v function
+        """
+
+        v1 = self.V1.forward(observation)
+        v2 = self.V2.forward(observation)
+
+        self.outputs["v1"] = v1
+        self.outputs["v2"] = v2
+
+        return v1, v2
 
 
 class AbstractActor(AbstractMLP, metaclass=abc.ABCMeta):
@@ -726,6 +820,177 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
             not_dones=self.storage["not_dones"][batch_indices],
             physics=self.storage["physics"][batch_indices],
         )
+
+    def add(self, *args, **kwargs):
+        pass
+
+
+class D4RLReplayBuffer(AbstractOfflineReplayBuffer):
+    """D4RL replay buffer."""
+
+    def __init__(
+        self,
+        dataset_path: Path,
+        discount: float,
+        device: torch.device,
+    ):
+        super().__init__(device=device, transitions=100000)
+
+        self._discount = discount
+        self.storage = {}
+
+        # load dataset on init
+        self.load_offline_dataset(dataset_path=dataset_path)
+
+    def load_offline_dataset(self, dataset_path: Path) -> None:
+
+        dataset = {}
+        with h5py.File(dataset_path, "r") as dataset_file:
+            for k in tqdm(self._get_keys(dataset_file), desc="Loading data into RAM"):
+                try:  # first try loading as an array
+                    dataset[k] = dataset_file[k][:]
+                except ValueError:  # try loading as a scalar
+                    dataset[k] = dataset_file[k][()]
+
+        N = dataset["rewards"].shape[0]
+        observations = []
+        next_observations = []
+        goals = []
+        next_goals = []
+        actions = []
+        rewards = []
+        not_dones = []
+        discounts = []
+
+        # The newer version of the dataset adds an explicit
+        # timeouts field. Keep old method for backwards compatability.
+        use_timeouts = False
+        terminate_on_end = False
+        if "timeouts" in dataset:
+            use_timeouts = True
+
+        episode_step = 0
+        for i in tqdm(range(N - 1), "Configuring dataset"):
+            obs = dataset["observations"][i].astype(np.float32)
+            next_obs = dataset["observations"][i + 1].astype(np.float32)
+            action = dataset["actions"][i].astype(np.float32)
+            reward = dataset["rewards"][i].astype(np.float32)
+            not_done = bool(~dataset["terminals"][i])
+
+            if use_timeouts:
+                final_timestep = dataset["timeouts"][i]
+            else:
+                final_timestep = episode_step == 1000 - 1
+            if (not terminate_on_end) and final_timestep:
+                # Skip this transition and don't apply terminals on
+                # the last step of an episode
+                episode_step = 0
+                continue
+            if ~not_done or final_timestep:
+                episode_step = 0
+
+            observations.append(obs)
+            next_observations.append(next_obs)
+            goals.append(obs)
+            next_goals.append(next_obs)
+            actions.append(action)
+            rewards.append([reward])
+            not_dones.append(not_done)
+            discounts.append([self._discount])
+            episode_step += 1
+
+        # concatenate into storage
+        self.storage["observations"] = torch.as_tensor(
+            np.array(observations), device=self.device
+        )
+        self.storage["actions"] = torch.as_tensor(np.array(actions), device=self.device)
+        self.storage["rewards"] = torch.as_tensor(np.array(rewards), device=self.device)
+        self.storage["next_observations"] = torch.as_tensor(
+            np.array(next_observations), device=self.device
+        )
+        self.storage["goals"] = torch.as_tensor(np.array(goals), device=self.device)
+        self.storage["next_goals"] = torch.as_tensor(
+            np.array(next_goals), device=self.device
+        )
+        self.storage["discounts"] = torch.as_tensor(
+            np.array(discounts), device=self.device, dtype=torch.float
+        )
+        self.storage["not_dones"] = torch.as_tensor(
+            np.array(not_dones), device=self.device
+        )
+
+    def sample(self, batch_size: int) -> Batch:
+        """
+        Samples OfflineBatch from the replay buffer.
+        Args:
+            batch_size: the batch size
+        Returns:
+            Batch: the batch of transitions
+        """
+
+        if len(self.storage) == 0:
+            raise RuntimeError("The replay buffer is empty.")
+
+        batch_indices = torch.randint(
+            0, len(self.storage["observations"]), (batch_size,)
+        )  # TODO: make attribute of replay buffer
+
+        return Batch(
+            observations=self.storage["observations"][batch_indices],
+            actions=self.storage["actions"][batch_indices],
+            rewards=self.storage["rewards"][batch_indices],
+            next_observations=self.storage["next_observations"][batch_indices],
+            discounts=self.storage["discounts"][batch_indices],
+            not_dones=self.storage["not_dones"][batch_indices],
+            goals=self.storage["goals"][batch_indices],
+            next_goals=self.storage["next_goals"][batch_indices],
+        )
+
+    def sample_task_inference_transitions(
+        self,
+        inference_steps: int,
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+
+        """
+        Sample transitions from the replay buffer for FB task inference.
+        Args:
+            inference_steps: number of transitions to sample
+        Returns:
+            z_inf_goals: dictionary of task inference transitions
+                for each environment variant
+            z_inf_rewards: dictionary of task inference rewards for each
+                environment variant
+        """
+
+        if len(self.storage) == 0:
+            raise RuntimeError(
+                "The replay buffer is empty. Task inference sampling"
+                "can only be performed after the replay buffer has been"
+                "loaded."
+            )
+
+        assert inference_steps <= len(self.storage["observations"])
+
+        # sample transitions from the replay buffer for processing
+        batch_indices = torch.randint(
+            0, len(self.storage["observations"]), (inference_steps,)
+        )
+
+        observations = self.storage["observations"][batch_indices]
+        rewards = self.storage["rewards"][batch_indices]
+
+        return observations, rewards
+
+    def _get_keys(self, h5file):
+        keys = []
+
+        def visitor(name, item):
+            if isinstance(item, h5py.Dataset):
+                keys.append(name)
+
+        h5file.visititems(visitor)
+
+        return keys
 
     def add(self, *args, **kwargs):
         pass
