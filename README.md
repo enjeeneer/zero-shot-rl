@@ -20,7 +20,7 @@ We show that by suppressing the predicted values (or measures) for actions not i
 
 _Figure 2: **Aggregate ExORL performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
 
-<img src="/media/d4rl-performance.png" width=85% height=auto class="center">
+<img src="/media/d4rl-performance.png" width=50% height=auto class="center">
 
 _Figure 3: **Aggregate D4RL performance.** Normalised average performance w.r.t. single-task baseline algorithm CQL._
 
