@@ -1,6 +1,6 @@
 # Zero Shot Reinforcement Learning from Low Quality Data
 
-
+## NeurIPS 2024
 <a href="https://github.com/enjeeneer/zero-shot-rl/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 [![PyTorch](https://img.shields.io/badge/PyTorch-grey.svg?logo=PyTorch)](https://pytorch.org/get-started/pytorch-2.0/) [![Paper](http://img.shields.io/badge/paper-arxiv.2309.15178-B31B1B.svg)](https://arxiv.org/abs/2309.15178)
@@ -26,7 +26,7 @@ _overestimate out-of-distribution state-action values_--Figure 1 (Middle).
 In this work, we resolve this by artificially suppressing these out-of-distribution values, leveraging ideas from _conservatism_ in the Offline RL literature--Figure 1 (Right). In experiments across
 a variety of systems and tasks, we show these methods consistently outperform their non-conservative counterparts when the datasets are suboptimal--Figure 2.
 
-<img src="/media/performance-profiles-subplot1.png" width=85% height=auto class="center">
+<img src="/media/performance-profiles-subplot2.png" width=85% height=auto class="center">
 
 
 _Figure 2: **Aggregate performance.** (Left) Normalised average performance w.r.t. single-task baseline algorithm CQL. (Right) Performance profiles showing distribution of scores across all tasks and domains. Both conservative FB variants stochastically dominate vanilla FB._
