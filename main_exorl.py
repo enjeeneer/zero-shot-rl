@@ -17,6 +17,7 @@ from agents.cql.agent import CQL
 from agents.fb.agent import FB
 from agents.cfb.agent import CFB
 from agents.td3.agent import TD3
+from agents.gciql.agent import GCIQL
 from agents.sf.agent import SF
 from agents.fb.replay_buffer import FBReplayBuffer
 from rewards import RewardFunctionConstructor
@@ -340,6 +341,45 @@ elif config["algorithm"] in ("vcfb", "mcfb"):
     z_inference_steps = config["z_inference_steps"]
     train_std = config["std_dev_schedule"]
     eval_std = config["std_dev_eval"]
+
+elif config["algorithm"] == "gciql":
+    agent = GCIQL(
+        observation_length=observation_length,
+        action_length=action_length,
+        device=config["device"],
+        name=config["name"],
+        critic_hidden_dimension=config["critic_hidden_dimension"],
+        critic_hidden_layers=config["critic_hidden_layers"],
+        critic_activation=config["activation"],
+        actor_hidden_dimension=config["actor_hidden_dimension"],
+        actor_hidden_layers=config["actor_hidden_layers"],
+        actor_learning_rate=config["actor_learning_rate"],
+        actor_activation=config["activation"],
+        batch_size=config["batch_size"],
+        discount=config["discount"],
+        tau=config["critic_tau"],
+        actor_update_frequency=config["actor_update_frequency"],
+        temperature=config["temperature"],
+        expectile=config["expectile"],
+        value_learning_rate=config["value_learning_rate"],
+        critic_target_update_frequency=config["critic_target_update_frequency"],
+    )
+
+    # load buffer
+    replay_buffer = FBReplayBuffer(
+        reward_constructor=reward_constructor,
+        dataset_path=dataset_path,
+        transitions=config["dataset_transitions"],
+        relabel=relabel,
+        task=config["train_task"],
+        device=config["device"],
+        discount=config["discount"],
+        action_condition=config["action_condition"],
+    )
+
+    z_inference_steps = config["z_inference_steps"]
+    train_std = None
+    eval_std = None
 
 elif config["algorithm"] == "sf-lap":
     if config["domain_name"] == "point_mass_maze":

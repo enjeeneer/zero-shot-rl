@@ -515,6 +515,7 @@ class Batch:
         goals: goal at current step in trajectory
         next_goals: goal at current step in trajectory
         future_goals: goals from an arbitrary *future* step in trajectory
+        gciql_goals: goals for GC-IQL
     """
 
     observations: torch.Tensor
@@ -529,6 +530,7 @@ class Batch:
     goals: Optional[torch.Tensor] = None
     next_goals: Optional[torch.Tensor] = None
     future_goals: Optional[torch.Tensor] = None
+    gciql_goals: Optional[torch.Tensor] = None
 
 
 class AbstractReplayBuffer(metaclass=abc.ABCMeta):
@@ -629,11 +631,18 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
         relabel: bool = True,
         transitions: int = None,
         action_condition: dict = None,
+        future: float = 0.99,
+        p_random_goal: float = 0.3,
+        p_traj_goal: float = 0.5,
+        p_currgoal_goal: float = 0.2,
     ):
         super().__init__(device=device, transitions=transitions)
 
         self._discount = discount
-
+        self._p_random_goal = p_random_goal
+        self._p_traj_goal = p_traj_goal
+        self._p_currgoal_goal = p_currgoal_goal
+        self._future = future
         self.storage = {}
 
         # load dataset on init
@@ -674,6 +683,9 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
         actions = []
         rewards = []
         next_observations = []
+        future_observations = []
+        future_goals = []
+        gciql_goals = []
         discounts = []
         not_dones = []
         physics = []
@@ -709,6 +721,48 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
             not_done[-1] = 0
             not_dones.append(not_done)
 
+            # future observations
+            # for each obs we randomly select an observation from the
+            # future of the trajectory according to a geometric dist
+            future_idxs = np.arange(len(episode["observation"]) - 1)
+            future_idxs = future_idxs + np.random.geometric(
+                p=(1 - self._future), size=len(episode["observation"]) - 1
+            )
+            future_idxs = np.clip(
+                future_idxs, 0, len(episode["observation"]) - 2
+            )  # 999
+            future_observations.append(
+                torch.as_tensor(
+                    episode["observation"][future_idxs],
+                    device=self.device,
+                )
+            )
+            future_goals.append(
+                torch.as_tensor(episode["observation"][future_idxs]),
+                device=self.device,
+            )
+
+            # get gciql goals
+            random_goal_idxs = np.random.randint(
+                0, len(episode["observation"]) - 1, len(episode["observation"]) - 1
+            )
+            current_goal_idxs = np.arange(len(episode["observation"]) - 1)
+            probs = np.random.random(len(episode["observation"]) - 1)
+            gciql_goal_idxs = np.where(
+                probs < self._p_traj_goal,
+                future_idxs,
+                np.where(
+                    probs < (self._p_traj_goal + self._p_random_goal),
+                    random_goal_idxs,
+                    current_goal_idxs,
+                ),
+            )
+            gciql_goals.append(
+                torch.as_tensor(
+                    episode["observation"][:-1][gciql_goal_idxs], device=self.device
+                )
+            )
+
         # the below creates a "local" random number generator with fixed seed that
         # always subsamples the same transitions from the dataset, even if the
         # global seed is changed
@@ -733,9 +787,29 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
         self.storage["actions"] = torch.cat(actions)[sample_indices]
         self.storage["rewards"] = torch.cat(rewards)[sample_indices]
         self.storage["next_observations"] = torch.cat(next_observations)[sample_indices]
+        self.storage["gciql_goals"] = torch.cat(gciql_goals)[sample_indices]
+        self.storage["future_goals"] = torch.cat(future_goals)[sample_indices]
         self.storage["discounts"] = torch.cat(discounts)[sample_indices]
         self.storage["physics"] = np.concatenate(physics)[sample_indices]
         self.storage["not_dones"] = torch.cat(not_dones)[sample_indices]
+
+        # hilp future obs resampling
+        # with probability self._random_goal we replace the future observation
+        # with a random observation from the dataset
+        future_observations = torch.cat(future_observations)
+        if self._p_random_goal > 0:
+            random_observations_idxs = torch.randperm(torch.cat(observations).shape[0])
+            random_observations = torch.cat(observations)[random_observations_idxs]
+            future_observations = torch.where(
+                (
+                    torch.rand(size=(future_observations.shape[0],), device=self.device)
+                    < self._p_random_goal
+                ).unsqueeze(-1),
+                random_observations,
+                future_observations,
+            )
+
+        self.storage["future_observations"] = future_observations[sample_indices]
 
         # sub sample only the transitions that satisfy the action condition
         if action_condition is not None:
@@ -816,9 +890,13 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
             actions=self.storage["actions"][batch_indices],
             rewards=self.storage["rewards"][batch_indices],
             next_observations=self.storage["next_observations"][batch_indices],
+            future_observations=self.storage["future_observations"][batch_indices],
             discounts=self.storage["discounts"][batch_indices],
             not_dones=self.storage["not_dones"][batch_indices],
             physics=self.storage["physics"][batch_indices],
+            goals=self.storage["goals"][batch_indices],
+            next_goals=self.storage["next_goals"][batch_indices],
+            future_goals=self.storage["future_goals"][batch_indices],
         )
 
     def add(self, *args, **kwargs):
