@@ -738,8 +738,10 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
                 )
             )
             future_goals.append(
-                torch.as_tensor(episode["observation"][future_idxs]),
-                device=self.device,
+                torch.as_tensor(
+                    episode["observation"][future_idxs],
+                    device=self.device,
+                ),
             )
 
             # get gciql goals
@@ -894,8 +896,6 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
             discounts=self.storage["discounts"][batch_indices],
             not_dones=self.storage["not_dones"][batch_indices],
             physics=self.storage["physics"][batch_indices],
-            goals=self.storage["goals"][batch_indices],
-            next_goals=self.storage["next_goals"][batch_indices],
             future_goals=self.storage["future_goals"][batch_indices],
         )
 
