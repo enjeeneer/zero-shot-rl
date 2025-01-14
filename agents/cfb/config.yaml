@@ -16,6 +16,7 @@ z_dimension: 50
 
 forward_hidden_dimension: 256
 forward_hidden_layers: 2
+forward_number_of_features: 2  # {obs-action, obs-z}
 forward_activation: "relu"
 
 backward_hidden_dimension: 256
