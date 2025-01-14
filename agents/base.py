@@ -697,12 +697,8 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
         physics = []
 
         # load the episodes
-        for i, (_, episode) in enumerate(
-            tqdm(episodes.items(), desc="Loading episodes from buffer")
-        ):
+        for _, episode in tqdm(episodes.items(), desc="Loading episodes from buffer"):
 
-            if i > 10:
-                break
             episode = episode.item()
 
             # relabel the episode
