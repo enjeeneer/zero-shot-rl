@@ -94,7 +94,9 @@ with open(config_path, "rb") as f:
 
 config.update(vars(args))
 config["device"] = torch.device(
-    "cuda" if torch.cuda.is_available() else ("mps" if torch.has_mps else "cpu")
+    "cuda"
+    if torch.cuda.is_available()
+    else ("mps" if torch.backends.mps.is_built() else "cpu")
 )
 
 set_seed_everywhere(config["seed"])
