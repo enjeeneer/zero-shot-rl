@@ -8,20 +8,20 @@ eval_rollouts: 10  # how many rollouts to average over when evaluating
 
 # forward-backward
 name: "fb"
-preprocessor_hidden_dimension: 512
+preprocessor_hidden_dimension: 1024
 preprocessor_hidden_layers: 2
 preprocessor_output_dimension: 512
 preprocessor_activation: "relu"
 
 z_dimension: 50
 
-forward_hidden_dimension: 256
+forward_hidden_dimension: 1024
 forward_hidden_layers: 2
 forward_number_of_features: 2  # {obs-action, obs-z}
 forward_activation: "relu"
 
-backward_hidden_dimension: 512
-backward_hidden_layers: 2
+backward_hidden_dimension: 256
+backward_hidden_layers: 3
 backward_activation: "relu"
 
 actor_hidden_dimension: 1024
