@@ -14,7 +14,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict
 
-from agents.utils import TruncatedNormal, squashed_gaussian
+from agents.utils import TruncatedNormal, SquashedNormal
 from rewards import RewardFunctionConstructor
 
 
@@ -446,7 +446,7 @@ class AbstractGaussianActor(AbstractMLP, metaclass=abc.ABCMeta):
             layernorm=False,
         )
 
-    def forward(self, observation: torch.Tensor, sample=True):
+    def forward(self, observation: torch.Tensor):
         """
         Takes observation and returns squashed normal distribution over action space.
         Args:
@@ -456,11 +456,17 @@ class AbstractGaussianActor(AbstractMLP, metaclass=abc.ABCMeta):
             dist: SquashedNormal (multivariate Gaussian) dist over action space.
 
         """
-        # mu, log_std = self.trunk(observation).chunk(2, dim=-1)  # pylint: disable=E1102
-        output = self.trunk(observation)
-        action, log_prob = squashed_gaussian(x=output, sample=sample)
+        mu, log_std = self.trunk(observation).chunk(2, dim=-1)  # pylint: disable=E1102
+        # output = self.trunk(observation)
 
-        return action, log_prob
+        log_std = torch.tanh(log_std)
+        log_std = self.log_std_min + 0.5 * (self.log_std_max - self.log_std_min) * (
+            log_std + 1
+        )
+        std = log_std.exp()
+        dist = SquashedNormal(mu, std)
+
+        return dist
 
 
 class AbstractLogger(metaclass=abc.ABCMeta):
@@ -691,8 +697,12 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
         physics = []
 
         # load the episodes
-        for _, episode in tqdm(episodes.items(), desc="Loading episodes from buffer"):
+        for i, (_, episode) in enumerate(
+            tqdm(episodes.items(), desc="Loading episodes from buffer")
+        ):
 
+            if i > 10:
+                break
             episode = episode.item()
 
             # relabel the episode
@@ -897,6 +907,7 @@ class OfflineReplayBuffer(AbstractOfflineReplayBuffer):
             not_dones=self.storage["not_dones"][batch_indices],
             physics=self.storage["physics"][batch_indices],
             future_goals=self.storage["future_goals"][batch_indices],
+            gciql_goals=self.storage["gciql_goals"][batch_indices],
         )
 
     def add(self, *args, **kwargs):
