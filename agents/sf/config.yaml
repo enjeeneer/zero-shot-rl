@@ -7,7 +7,7 @@ eval_rollouts: 10  # how many rollouts to average over when evaluating
 
 # forward-backward
 name: "sf"
-preprocessor_hidden_dimension: 512
+preprocessor_hidden_dimension: 1024
 preprocessor_hidden_layers: 2
 preprocessor_output_dimension: 512
 preprocessor_activation: "relu"
@@ -19,8 +19,8 @@ forward_hidden_layers: 2
 forward_number_of_features: 2  # {obs-action, obs-z}
 forward_activation: "relu"
 
-features_hidden_dimension: 512
-features_hidden_layers: 2
+features_hidden_dimension: 256
+features_hidden_layers: 3
 features_activation: "relu"
 
 actor_hidden_dimension: 1024
