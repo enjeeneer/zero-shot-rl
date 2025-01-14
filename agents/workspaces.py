@@ -23,6 +23,7 @@ from agents.cql.agent import CQL
 from agents.base import OfflineReplayBuffer
 
 from agents.cfb.agent import CFB
+from agents.gciql.agent import GCIQL
 
 from agents.sf.agent import SF
 from agents.base import D4RLReplayBuffer
@@ -66,7 +67,7 @@ class OfflineRLWorkspace(AbstractWorkspace):
 
     def train(
         self,
-        agent: Union[CQL, FB, CFB],
+        agent: Union[CQL, FB, CFB, GCIQL],
         tasks: List[str],
         agent_config: Dict,
         replay_buffer: Union[OfflineReplayBuffer, FBReplayBuffer],
@@ -77,7 +78,7 @@ class OfflineRLWorkspace(AbstractWorkspace):
         if self.wandb_logging:
             run = wandb.init(
                 config=agent_config,
-                tags=[agent.name, "core"],
+                tags=[agent.name],
                 reinit=True,
             )
             model_path = self.model_dir / run.name
@@ -93,7 +94,7 @@ class OfflineRLWorkspace(AbstractWorkspace):
         best_model_path = None
 
         # sample set transitions for z inference
-        if isinstance(agent, FB):
+        if isinstance(agent, (FB, SF, GCIQL)):
             if self.domain_name == "point_mass_maze":
                 self.goal_states = {}
                 for task, goal_state in point_mass_maze_goals.items():
@@ -164,7 +165,7 @@ class OfflineRLWorkspace(AbstractWorkspace):
             metrics: dict of metrics
         """
 
-        if isinstance(agent, FB):
+        if isinstance(agent, (FB, SF, GCIQL)):
             zs = {}
             if self.domain_name == "point_mass_maze":
                 for task, goal_state in self.goal_states.items():
@@ -185,13 +186,30 @@ class OfflineRLWorkspace(AbstractWorkspace):
 
                 timestep = self.env.reset()
                 while not timestep.last():
-                    if isinstance(agent, FB):
+                    if isinstance(agent, (FB, GCIQL)):
                         action, _ = agent.act(
                             timestep.observation["observations"],
                             task=zs[task],
                             step=None,
                             sample=False,
                         )
+
+                    elif isinstance(agent, SF):
+                        if self.domain_name != "point_mass_maze":
+                            z = zs[task]
+                        # calculate z at every step
+                        else:
+                            z = agent.infer_z_from_goal(
+                                observation=timestep.observation["observations"],
+                                goal_state=self.goal_states[task],
+                            )
+                        action, _ = agent.act(
+                            timestep.observation["observations"],
+                            task=z,
+                            step=None,
+                            sample=False,
+                        )
+
                     else:
                         action = agent.act(
                             timestep.observation["observations"],
